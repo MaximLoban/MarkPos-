@@ -1,0 +1,17 @@
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Infrastructure.deps.json
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Infrastructure.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Infrastructure.pdb
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Application.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Domain.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Application.pdb
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\bin\Debug\net10.0\MarkPos.Domain.pdb
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.csproj.AssemblyReference.cache
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.AssemblyInfoInputs.cache
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.AssemblyInfo.cs
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos..FED89124.Up2Date
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\refint\MarkPos.Infrastructure.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.pdb
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\ref\MarkPos.Infrastructure.dll

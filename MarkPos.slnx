@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MarkPos.Application/MarkPos.Application.csproj" />
+    <Project Path="src/MarkPos.Domain/MarkPos.Domain.csproj" />
+    <Project Path="src/MarkPos.Infrastructure/MarkPos.Infrastructure.csproj" />
+    <Project Path="src/MarkPos.UI/MarkPos.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MarkPos.Application.Tests/MarkPos.Application.Tests.csproj" />
+    <Project Path="tests/MarkPos.Domain.Tests/MarkPos.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

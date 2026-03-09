@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "MarkPos.Domain/1.0.0": {
+        "runtime": {
+          "MarkPos.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MarkPos.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

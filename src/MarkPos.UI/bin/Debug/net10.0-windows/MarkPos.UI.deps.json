@@ -1,0 +1,55 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "MarkPos.UI/1.0.0": {
+        "dependencies": {
+          "MarkPos.Application": "1.0.0"
+        },
+        "runtime": {
+          "MarkPos.UI.dll": {}
+        }
+      },
+      "MarkPos.Application/1.0.0": {
+        "dependencies": {
+          "MarkPos.Domain": "1.0.0"
+        },
+        "runtime": {
+          "MarkPos.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MarkPos.Domain/1.0.0": {
+        "runtime": {
+          "MarkPos.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MarkPos.UI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MarkPos.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MarkPos.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
