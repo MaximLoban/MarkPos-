@@ -8,5 +8,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/MarkPos.Application.Tests/MarkPos.Application.Tests.csproj" />
     <Project Path="tests/MarkPos.Domain.Tests/MarkPos.Domain.Tests.csproj" />
+    <Project Path="tests/MarkPos.Infrastructure.Tests/MarkPos.Infrastructure.Tests.csproj" />
   </Folder>
 </Solution>

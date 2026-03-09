@@ -1,12 +1,361 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\NewPos\\MarkPos\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8DE0DC86-B170-5AC1-F43B-2EC12A1AD526}|tests\\MarkPos.Infrastructure.Tests\\MarkPos.Infrastructure.Tests.csproj|d:\\newpos\\markpos\\tests\\markpos.infrastructure.tests\\productrepositorytests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DE0DC86-B170-5AC1-F43B-2EC12A1AD526}|tests\\MarkPos.Infrastructure.Tests\\MarkPos.Infrastructure.Tests.csproj|solutionrelative:tests\\markpos.infrastructure.tests\\productrepositorytests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\stationconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\stationconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E22136B-150B-E5ED-9273-FABBF9343EAE}|src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj|d:\\newpos\\markpos\\src\\markpos.infrastructure\\markpos.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{9E22136B-150B-E5ED-9273-FABBF9343EAE}|src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj|solutionrelative:src\\markpos.infrastructure\\markpos.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\usecases\\additembybarcodeusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\usecases\\additembybarcodeusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\markpos.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\markpos.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\markpos.application.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\markpos.application.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09A9C2C8-5333-4A82-F49E-73A8356D52E2}|tests\\MarkPos.Application.Tests\\MarkPos.Application.Tests.csproj|d:\\newpos\\markpos\\tests\\markpos.application.tests\\additembybarcodeusecasetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09A9C2C8-5333-4A82-F49E-73A8356D52E2}|tests\\MarkPos.Application.Tests\\MarkPos.Application.Tests.csproj|solutionrelative:tests\\markpos.application.tests\\additembybarcodeusecasetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\usecases\\closereceiptusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\usecases\\closereceiptusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\usecases\\requestdiscountsusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\usecases\\requestdiscountsusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\interfaces\\idiscountclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\interfaces\\idiscountclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\interfaces\\ititanposclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\interfaces\\ititanposclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\interfaces\\ireceiptrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\interfaces\\ireceiptrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\interfaces\\iproductrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\interfaces\\iproductrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\dtos\\titanposdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\dtos\\titanposdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|d:\\newpos\\markpos\\src\\markpos.application\\dtos\\discountdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85C281D6-0EAF-EE98-FE6F-6C06867BEC94}|src\\MarkPos.Application\\MarkPos.Application.csproj|solutionrelative:src\\markpos.application\\dtos\\discountdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE042796-BD09-B380-A210-177B8ADEE916}|tests\\MarkPos.Domain.Tests\\MarkPos.Domain.Tests.csproj|d:\\newpos\\markpos\\tests\\markpos.domain.tests\\receipttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE042796-BD09-B380-A210-177B8ADEE916}|tests\\MarkPos.Domain.Tests\\MarkPos.Domain.Tests.csproj|solutionrelative:tests\\markpos.domain.tests\\receipttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\valueobjects\\discountlineresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\valueobjects\\discountlineresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\valueobjects\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\valueobjects\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\entities\\receipt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\entities\\receipt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\entities\\receiptline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\entities\\receiptline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|d:\\newpos\\markpos\\src\\markpos.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E1DAD2C-F188-1034-A5DE-9D2407BC0FEA}|src\\MarkPos.Domain\\MarkPos.Domain.csproj|solutionrelative:src\\markpos.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductRepositoryTests.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
+              "RelativeDocumentMoniker": "tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
+              "RelativeToolTip": "tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:53:33.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StationConfig.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\StationConfig.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\StationConfig.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\StationConfig.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\StationConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:29:29.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RequestDiscountsUseCase.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\RequestDiscountsUseCase.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\UseCases\\RequestDiscountsUseCase.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\RequestDiscountsUseCase.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\UseCases\\RequestDiscountsUseCase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:28:32.38Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MarkPos.Domain.csproj",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\MarkPos.Domain.csproj",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\MarkPos.Domain.csproj",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\MarkPos.Domain.csproj",
+              "RelativeToolTip": "src\\MarkPos.Domain\\MarkPos.Domain.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-09T12:59:37.137Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AddItemByBarcodeUseCase.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\AddItemByBarcodeUseCase.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\UseCases\\AddItemByBarcodeUseCase.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\AddItemByBarcodeUseCase.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\UseCases\\AddItemByBarcodeUseCase.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:27:26.35Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MarkPos.Infrastructure.csproj",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj",
+              "RelativeToolTip": "src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-09T13:38:54.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CloseReceiptUseCase.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\CloseReceiptUseCase.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\UseCases\\CloseReceiptUseCase.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\UseCases\\CloseReceiptUseCase.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\UseCases\\CloseReceiptUseCase.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAiwEgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:31:00.571Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AddItemByBarcodeUseCaseTests.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Application.Tests\\AddItemByBarcodeUseCaseTests.cs",
+              "RelativeDocumentMoniker": "tests\\MarkPos.Application.Tests\\AddItemByBarcodeUseCaseTests.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Application.Tests\\AddItemByBarcodeUseCaseTests.cs",
+              "RelativeToolTip": "tests\\MarkPos.Application.Tests\\AddItemByBarcodeUseCaseTests.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwEMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:33:14.72Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IDiscountClient.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IDiscountClient.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\Interfaces\\IDiscountClient.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IDiscountClient.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\Interfaces\\IDiscountClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:25:37.73Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MarkPos.Application.csproj",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\MarkPos.Application.csproj",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\MarkPos.Application.csproj",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\MarkPos.Application.csproj",
+              "RelativeToolTip": "src\\MarkPos.Application\\MarkPos.Application.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-09T13:19:37.38Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ITitanPosClient.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\ITitanPosClient.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\Interfaces\\ITitanPosClient.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\ITitanPosClient.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\Interfaces\\ITitanPosClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:24:58.914Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IReceiptRepository.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IReceiptRepository.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\Interfaces\\IReceiptRepository.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IReceiptRepository.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\Interfaces\\IReceiptRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:24:33.004Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IProductRepository.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IProductRepository.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\Interfaces\\IProductRepository.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\Interfaces\\IProductRepository.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\Interfaces\\IProductRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:23:30.987Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TitanPosDtos.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\DTOs\\TitanPosDtos.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\DTOs\\TitanPosDtos.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\DTOs\\TitanPosDtos.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\DTOs\\TitanPosDtos.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwDUAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:22:19.502Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DiscountDtos.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\DTOs\\DiscountDtos.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Application\\DTOs\\DiscountDtos.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Application\\DTOs\\DiscountDtos.cs",
+              "RelativeToolTip": "src\\MarkPos.Application\\DTOs\\DiscountDtos.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwDgAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:20:55.562Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ReceiptTests.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Domain.Tests\\ReceiptTests.cs",
+              "RelativeDocumentMoniker": "tests\\MarkPos.Domain.Tests\\ReceiptTests.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Domain.Tests\\ReceiptTests.cs",
+              "RelativeToolTip": "tests\\MarkPos.Domain.Tests\\ReceiptTests.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAiwH8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:16:49.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "DiscountLineResult.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\ValueObjects\\DiscountLineResult.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\ValueObjects\\DiscountLineResult.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\ValueObjects\\DiscountLineResult.cs",
+              "RelativeToolTip": "src\\MarkPos.Domain\\ValueObjects\\DiscountLineResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:13:57.032Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Receipt.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\Receipt.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\Entities\\Receipt.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\Receipt.cs",
+              "RelativeToolTip": "src\\MarkPos.Domain\\Entities\\Receipt.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAswEoAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:11:38.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ReceiptLine.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\ReceiptLine.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\Entities\\ReceiptLine.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\ReceiptLine.cs",
+              "RelativeToolTip": "src\\MarkPos.Domain\\Entities\\ReceiptLine.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA9wCwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:10:03.867Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\Entities\\Product.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\Entities\\Product.cs",
+              "RelativeToolTip": "src\\MarkPos.Domain\\Entities\\Product.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:08:09.408Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Result.cs",
+              "DocumentMoniker": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\ValueObjects\\Result.cs",
+              "RelativeDocumentMoniker": "src\\MarkPos.Domain\\ValueObjects\\Result.cs",
+              "ToolTip": "D:\\NewPos\\MarkPos\\src\\MarkPos.Domain\\ValueObjects\\Result.cs",
+              "RelativeToolTip": "src\\MarkPos.Domain\\ValueObjects\\Result.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA1wCcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T13:05:34.866Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
