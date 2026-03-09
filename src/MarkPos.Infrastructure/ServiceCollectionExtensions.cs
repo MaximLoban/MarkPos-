@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
         // Persistence
         services.AddSingleton<IProductRepository>(
             _ => new ProductRepository(connectionString));
-
+        services.AddSingleton<IReceiptRepository, ReceiptRepository>();
         // Discount HTTP client
         services.AddHttpClient<IDiscountClient, DiscountHttpClient>(client =>
         {
