@@ -100,3 +100,8 @@ D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net8.0\refint\MarkPo
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net8.0\MarkPos.Application.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net8.0\MarkPos.Application.Tests.genruntimeconfig.cache
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net8.0\ref\MarkPos.Application.Tests.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net8.0\Castle.Core.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net8.0\Moq.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net8.0\System.Diagnostics.EventLog.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll
