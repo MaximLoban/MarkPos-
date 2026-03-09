@@ -35,10 +35,10 @@ public class RequestDiscountsUseCase
 
         var discountResults = response.Value!.Credit
             .Select(c => new DiscountLineResult(
-                LineNumber: c.LineNumber,
-                Price: c.Price,
-                DiscountSum: c.DiscountOut,
-                SumAdd: c.SumAdd,
+                LineNumber: int.Parse(c.LineNumber),
+                Price: decimal.Parse(c.Price, System.Globalization.CultureInfo.InvariantCulture),
+                DiscountSum: decimal.Parse(c.DiscountOut, System.Globalization.CultureInfo.InvariantCulture),
+                SumAdd: decimal.Parse(c.SumAdd, System.Globalization.CultureInfo.InvariantCulture),
                 DiscountOutDescription: c.DiscountOutDescription))
             .ToList();
 

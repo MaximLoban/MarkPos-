@@ -47,11 +47,12 @@ public record DiscountResponse(
 );
 
 public record DiscountResponseLine(
-    int LineNumber,
-    long GoodsId,
-    decimal Price,
-    decimal Quantity,
-    decimal SumAdd,
-    decimal DiscountOut,
+    string LineNumber,
+    string GoodsId,
+    string Price,
+    string Quantity,
+    string SumAdd,
+    string CoinsAdd,
+    string DiscountOut,
     string DiscountOutDescription
 );
