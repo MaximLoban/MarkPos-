@@ -87,3 +87,13 @@ D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.Infrastructure
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.Infrastructure.pdb
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\appsettings.json
 D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\MarkPos.UI_Content.g.cs
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.CommandLine.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.EnvironmentVariables.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.UserSecrets.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Hosting.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.Configuration.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.Console.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.Debug.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.EventLog.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.EventSource.dll
