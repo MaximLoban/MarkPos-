@@ -16,4 +16,5 @@ public class StationConfig
     public string FiscalType { get; init; } = "81";
     public string CashboxType { get; init; } = "3";
     public string StationSaleTypeId { get; init; } = "18";
+	public string BaseId { get; init; } = "1";
 }

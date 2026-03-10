@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MarkPos.Domain\MarkPos.Domain.csproj" />
+    <ProjectReference Include="..\..\src\MarkPos.Application\MarkPos.Application.csproj" />
   </ItemGroup>
 
 </Project>

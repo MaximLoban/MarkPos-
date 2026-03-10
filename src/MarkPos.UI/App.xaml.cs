@@ -1,8 +1,10 @@
 ﻿using MarkPos.Application;
+using MarkPos.Application.Interfaces;
 using MarkPos.Infrastructure;
 using MarkPos.Infrastructure.Persistence;
-using MarkPos.Application.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 using System.Windows;
 
 namespace MarkPos.UI;
@@ -23,20 +25,26 @@ public partial class App : System.Windows.Application
 
         try
         {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+
             var services = new ServiceCollection();
 
             services.AddMarkPosInfrastructure(
-                connectionString: "Server=localhost;Database=MarkPos;Trusted_Connection=True;TrustServerCertificate=True",
-                discountUrl: "http://localhost:8080/",
-                titanPosUrl: "http://localhost:3335/",
-                titanInitialKey: "init",
+                connectionString: config["Database:MainConnection"]!,
+                discountUrl: config["Discount:Url"]!,
+                titanPosUrl: config["TitanPos:Url"]!,
+                titanInitialKey: config["TitanPos:InitialKey"]!,
                 stationConfig: new StationConfig
                 {
-                    ShopNumber = "506",
-                    StationNumber = "8",
-                    FiscalType = "81",
-                    CashboxType = "3",
-                    StationSaleTypeId = "18"
+                    ShopNumber = config["Station:ShopNumber"]!,
+                    StationNumber = config["Station:StationNumber"]!,
+                    FiscalType = config["Station:FiscalType"]!,
+                    CashboxType = config["Station:CashboxType"]!,
+                    StationSaleTypeId = config["Station:StationSaleTypeId"]!,
+                    BaseId = config["Station:BaseId"]!
                 }
             );
 

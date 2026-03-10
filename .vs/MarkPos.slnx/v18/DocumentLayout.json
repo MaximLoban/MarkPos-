@@ -104,7 +104,7 @@
               "RelativeDocumentMoniker": "tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
               "ToolTip": "D:\\NewPos\\MarkPos\\tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
               "RelativeToolTip": "tests\\MarkPos.Infrastructure.Tests\\ProductRepositoryTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-09T13:53:33.459Z",
               "EditorCaption": ""
@@ -119,8 +119,7 @@
               "RelativeToolTip": "src\\MarkPos.Application\\StationConfig.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T13:29:29.233Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T13:29:29.233Z"
             },
             {
               "$type": "Document",
@@ -144,8 +143,7 @@
               "RelativeToolTip": "src\\MarkPos.Domain\\MarkPos.Domain.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-09T12:59:37.137Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T12:59:37.137Z"
             },
             {
               "$type": "Document",
@@ -157,8 +155,7 @@
               "RelativeToolTip": "src\\MarkPos.Application\\UseCases\\AddItemByBarcodeUseCase.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAACcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T13:27:26.35Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T13:27:26.35Z"
             },
             {
               "$type": "Document",
@@ -170,8 +167,7 @@
               "RelativeToolTip": "src\\MarkPos.Infrastructure\\MarkPos.Infrastructure.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-09T13:38:54.334Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T13:38:54.334Z"
             },
             {
               "$type": "Document",

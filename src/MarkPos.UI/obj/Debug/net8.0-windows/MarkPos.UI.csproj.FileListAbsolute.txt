@@ -85,3 +85,5 @@ D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win\lib\net8.
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.Infrastructure.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.Infrastructure.pdb
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\appsettings.json
+D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\MarkPos.UI_Content.g.cs

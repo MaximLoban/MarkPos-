@@ -98,3 +98,5 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\refint\MarkPos.Dom
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.genruntimeconfig.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\ref\MarkPos.Domain.Tests.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.pdb
