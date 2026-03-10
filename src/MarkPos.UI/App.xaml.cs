@@ -45,7 +45,8 @@ public partial class App : System.Windows.Application
                     CashboxType = config["Station:CashboxType"]!,
                     StationSaleTypeId = config["Station:StationSaleTypeId"]!,
                     BaseId = config["Station:BaseId"]!
-                }
+                },
+                scannerPort: int.Parse(config["Scanner:Port"]!)
             );
 
             services.AddSingleton<IReceiptRepository, ReceiptRepository>();

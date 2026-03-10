@@ -1,10 +1,13 @@
 ﻿using MarkPos.Application;
 using MarkPos.Application.Interfaces;
+using MarkPos.Application.Scanner;
 using MarkPos.Application.UseCases;
 using MarkPos.Infrastructure.Discount;
 using MarkPos.Infrastructure.Persistence;
+using MarkPos.Infrastructure.Scanner;
 using MarkPos.Infrastructure.TitanPos;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MarkPos.Infrastructure;
 
@@ -16,12 +19,13 @@ public static class ServiceCollectionExtensions
         string discountUrl,
         string titanPosUrl,
         string titanInitialKey,
-        StationConfig stationConfig)
+        StationConfig stationConfig,
+        int scannerPort)
     {
         // Persistence
         services.AddSingleton<IProductRepository>(
             _ => new ProductRepository(connectionString));
-        services.AddSingleton<IReceiptRepository, ReceiptRepository>();
+
         // Discount HTTP client
         services.AddHttpClient<IDiscountClient, DiscountHttpClient>(client =>
         {
@@ -50,6 +54,15 @@ public static class ServiceCollectionExtensions
         services.AddTransient<SearchProductsUseCase>();
         services.AddTransient<RequestDiscountsUseCase>();
         services.AddTransient<CloseReceiptUseCase>();
+
+        // Scanner
+        services.AddSingleton<ScannerParser>();
+        services.AddSingleton<TcpScannerListener>(sp => new TcpScannerListener(
+            port: scannerPort,
+            parser: sp.GetRequiredService<ScannerParser>(),
+            logger: sp.GetRequiredService<ILogger<TcpScannerListener>>()
+        ));
+        services.AddHostedService(sp => sp.GetRequiredService<TcpScannerListener>());
 
         return services;
     }

@@ -1,55 +1,92 @@
-﻿namespace MarkPos.UI;
-
-using MarkPos.Application.DTOs;
+﻿using MarkPos.Application.DTOs;
+using MarkPos.Application.Scanner;
 using MarkPos.Application.UseCases;
 using MarkPos.Domain.Entities;
+using MarkPos.Infrastructure.Scanner;
 using System.Windows;
 using System.Windows.Input;
 
-
+namespace MarkPos.UI;
 
 public partial class MainWindow : Window
 {
     private readonly AddItemByBarcodeUseCase _addItem;
     private readonly RequestDiscountsUseCase _requestDiscounts;
     private readonly CloseReceiptUseCase _closeReceipt;
+    private readonly TcpScannerListener _scanner;
 
-    private Receipt _receipt = Receipt.New(1); // TODO: заменить на счётчик из БД
+    private Receipt _receipt = Receipt.New(1);
     private CancellationTokenSource? _discountCts;
 
     public MainWindow(
         AddItemByBarcodeUseCase addItem,
         RequestDiscountsUseCase requestDiscounts,
-        CloseReceiptUseCase closeReceipt)
+        CloseReceiptUseCase closeReceipt,
+        TcpScannerListener scanner)
     {
         InitializeComponent();
         _addItem = addItem;
         _requestDiscounts = requestDiscounts;
         _closeReceipt = closeReceipt;
+        _scanner = scanner;
+
+        _scanner.MessageReceived += OnScannerMessage;
 
         BarcodeInput.Focus();
     }
 
-    // ── Сканирование ──────────────────────────────────────────────────────────
+    // ── Обработка сообщений от сканера ───────────────────────────────────────
+
+    private void OnScannerMessage(ScannerMessage message)
+    {
+        // Все обновления UI должны идти через Dispatcher
+        Dispatcher.InvokeAsync(async () =>
+        {
+            switch (message)
+            {
+                case BarcodeMessage barcodeMsg:
+                    await AddByBarcodeAsync(barcodeMsg.Barcode);
+                    break;
+
+                case WeightBarcodeMessage weightMsg:
+                    await AddByBarcodeAsync(weightMsg.Barcode, weightMsg.Quantity);
+                    break;
+
+                case DiscountCardMessage cardMsg:
+                    StatusText.Text = $"Дисконтная карта: {cardMsg.CardNumber}";
+                    // TODO: обработка дисконтной карты
+                    break;
+
+                case AdvertisingQrMessage:
+                    StatusText.Text = "Отсканируйте другой QR-код. Данный QR содержит рекламу.";
+                    break;
+
+                case InvalidBarcodeMessage invalidMsg:
+                    StatusText.Text = invalidMsg.Reason;
+                    break;
+            }
+        });
+    }
+
+    // ── Сканирование вручную ─────────────────────────────────────────────────
 
     private async void BarcodeInput_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
-            await AddByBarcodeAsync();
+            await AddByBarcodeAsync(BarcodeInput.Text.Trim());
     }
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
-        => await AddByBarcodeAsync();
+        => await AddByBarcodeAsync(BarcodeInput.Text.Trim());
 
-    private async Task AddByBarcodeAsync()
+    private async Task AddByBarcodeAsync(string barcode, decimal quantity = 1)
     {
-        var barcode = BarcodeInput.Text.Trim();
         if (string.IsNullOrEmpty(barcode)) return;
 
         StatusText.Text = "";
         BarcodeInput.Clear();
 
-        var result = await _addItem.ExecuteAsync(_receipt, barcode);
+        var result = await _addItem.ExecuteAsync(_receipt, barcode, quantity);
 
         if (!result.IsSuccess)
         {
@@ -61,7 +98,6 @@ public partial class MainWindow : Window
         RefreshGrid();
         BarcodeInput.Focus();
 
-        // Запрашиваем скидки асинхронно — UI не блокируется
         await RequestDiscountsAsync();
     }
 
@@ -69,13 +105,12 @@ public partial class MainWindow : Window
 
     private async Task RequestDiscountsAsync()
     {
-        // Отменяем предыдущий запрос если пользователь быстро сканирует
         _discountCts?.Cancel();
         _discountCts = new CancellationTokenSource();
 
         try
         {
-            await Task.Delay(200, _discountCts.Token); // debounce
+            await Task.Delay(200, _discountCts.Token);
             await _requestDiscounts.ExecuteAsync(_receipt, _discountCts.Token);
             RefreshGrid();
         }
@@ -86,7 +121,7 @@ public partial class MainWindow : Window
         }
     }
 
-    // ── Удаление позиции ──────────────────────────────────────────────────────
+    // ── Удаление позиции ─────────────────────────────────────────────────────
 
     private async void RemoveButton_Click(object sender, RoutedEventArgs e)
     {
@@ -97,7 +132,7 @@ public partial class MainWindow : Window
         await RequestDiscountsAsync();
     }
 
-    // ── Отмена чека ───────────────────────────────────────────────────────────
+    // ── Отмена чека ──────────────────────────────────────────────────────────
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
@@ -107,7 +142,7 @@ public partial class MainWindow : Window
 
         if (confirm != MessageBoxResult.Yes) return;
 
-        _receipt = Receipt.New(1); // TODO: счётчик из БД
+        _receipt = Receipt.New(1);
         RefreshGrid();
         StatusText.Text = "";
         BarcodeInput.Focus();
@@ -123,7 +158,6 @@ public partial class MainWindow : Window
             return;
         }
 
-        // MVP: оплата наличными на полную сумму
         var payments = new List<TitanPayment>
         {
             new(Sum: _receipt.TotalSum, TypeFlag: 1)
@@ -143,12 +177,12 @@ public partial class MainWindow : Window
             MessageBoxButton.OK,
             MessageBoxImage.Information);
 
-        _receipt = Receipt.New(1); // TODO: счётчик из БД
+        _receipt = Receipt.New(1);
         RefreshGrid();
         BarcodeInput.Focus();
     }
 
-    // ── Обновление UI ─────────────────────────────────────────────────────────
+    // ── Обновление UI ────────────────────────────────────────────────────────
 
     private void RefreshGrid()
     {
