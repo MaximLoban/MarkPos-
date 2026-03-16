@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+
 namespace MarkPos.Infrastructure.Discount;
 
 public class DiscountHttpClient : IDiscountClient
@@ -28,7 +29,6 @@ public class DiscountHttpClient : IDiscountClient
         DiscountRequest request,
         CancellationToken ct = default)
     {
-        // Оборачиваем в протокольный конверт как в реальных логах
         var envelope = new
         {
             CRC = "",
@@ -45,7 +45,10 @@ public class DiscountHttpClient : IDiscountClient
                     CreditGroup = request.CreditGroup,
                     Credit = request.Credit,
                     PaymentInfo = Array.Empty<object>(),
-                    BonusItems = Array.Empty<object>()
+                    BonusItems = Array.Empty<object>(),
+                    DiscountCardId = request.DiscountCardId,
+                    DiscountCardGroupId = request.DiscountCardGroupId,
+                    DiscountCardGroupId2 = request.DiscountCardGroupId2
                 }
             }
         };
