@@ -6,6 +6,7 @@ using MarkPos.Infrastructure.Scanner;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MarkPos.UI;
@@ -16,17 +17,17 @@ public partial class MainWindow : Window
     private readonly RequestDiscountsUseCase _requestDiscounts;
     private readonly CloseReceiptUseCase _closeReceipt;
     private readonly TcpScannerListener _scanner;
+    private readonly AttachDiscountCardUseCase _attachDiscountCard;
 
     private Receipt _receipt = Receipt.New(1);
     private CancellationTokenSource? _discountCts;
-    private readonly AttachDiscountCardUseCase _attachDiscountCard;
 
     public MainWindow(
-     AddItemByBarcodeUseCase addItem,
-     RequestDiscountsUseCase requestDiscounts,
-     CloseReceiptUseCase closeReceipt,
-     TcpScannerListener scanner,
-     AttachDiscountCardUseCase attachDiscountCard)
+        AddItemByBarcodeUseCase addItem,
+        RequestDiscountsUseCase requestDiscounts,
+        CloseReceiptUseCase closeReceipt,
+        TcpScannerListener scanner,
+        AttachDiscountCardUseCase attachDiscountCard)
     {
         InitializeComponent();
         _addItem = addItem;
@@ -51,17 +52,19 @@ public partial class MainWindow : Window
                 switch (message)
                 {
                     case BarcodeMessage barcodeMsg:
-                        LogToFile($"Добавляем штрихкод: {barcodeMsg.Barcode}");
+                        LogToFile($"Barcode received: {barcodeMsg.Barcode}");
                         await AddByBarcodeAsync(barcodeMsg.Barcode);
                         break;
 
                     case WeightBarcodeMessage weightMsg:
+                        LogToFile($"Weight barcode: {weightMsg.Barcode} qty={weightMsg.Quantity}");
                         await AddByBarcodeAsync(weightMsg.Barcode, weightMsg.Quantity);
                         break;
 
                     case DiscountCardMessage cardMsg:
-                        LogToFile($"Дисконтная карта: {cardMsg.CardNumber}");
+                        LogToFile($"Discount card: {cardMsg.CardNumber}");
                         var cardResult = await _attachDiscountCard.ExecuteAsync(_receipt, cardMsg.CardNumber);
+                        LogToFile($"Card attach result: {cardResult.IsSuccess} {cardResult.Error}");
                         if (cardResult.IsSuccess)
                             StatusText.Text = $"Карта принята: {cardMsg.CardNumber}";
                         else
@@ -79,7 +82,7 @@ public partial class MainWindow : Window
             }
             catch (Exception ex)
             {
-                LogToFile($"ОШИБКА в Dispatcher: {ex.Message}");
+                LogToFile($"ERROR in Dispatcher: {ex.Message}");
                 StatusText.Text = $"Ошибка: {ex.Message}";
             }
         });
@@ -98,10 +101,13 @@ public partial class MainWindow : Window
     {
         if (string.IsNullOrEmpty(barcode)) return;
 
+        LogToFile($"AddByBarcodeAsync: barcode={barcode} qty={quantity}");
         StatusText.Text = "";
         BarcodeInput.Clear();
 
         var result = await _addItem.ExecuteAsync(_receipt, barcode, quantity);
+
+        LogToFile($"AddItem result: success={result.IsSuccess} error={result.Error}");
 
         if (!result.IsSuccess)
         {
@@ -110,6 +116,7 @@ public partial class MainWindow : Window
             return;
         }
 
+        LogToFile($"Item added, lines count={_receipt.Lines.Count}, calling RequestDiscountsAsync");
         RefreshGrid();
         BarcodeInput.Focus();
 
@@ -118,18 +125,25 @@ public partial class MainWindow : Window
 
     private async Task RequestDiscountsAsync()
     {
+        LogToFile($"RequestDiscountsAsync called, lines={_receipt.Lines.Count}");
         _discountCts?.Cancel();
         _discountCts = new CancellationTokenSource();
 
         try
         {
             await Task.Delay(200, _discountCts.Token);
+            LogToFile("Sending request to discount module...");
             await _requestDiscounts.ExecuteAsync(_receipt, _discountCts.Token);
+            LogToFile("Discount module response received");
             RefreshGrid();
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            LogToFile("RequestDiscountsAsync cancelled");
+        }
         catch (Exception ex)
         {
+            LogToFile($"Discount module error: {ex.Message}");
             StatusText.Text = $"Скидки недоступны: {ex.Message}";
         }
     }
@@ -138,6 +152,7 @@ public partial class MainWindow : Window
     {
         if (LinesGrid.SelectedItem is not ReceiptLine line) return;
 
+        LogToFile($"RemoveItem: lineNumber={line.LineNumber}");
         _receipt.RemoveItem(line.LineNumber);
         RefreshGrid();
         await RequestDiscountsAsync();
@@ -151,6 +166,7 @@ public partial class MainWindow : Window
 
         if (confirm != MessageBoxResult.Yes) return;
 
+        LogToFile("Receipt cancelled");
         _receipt = Receipt.New(1);
         RefreshGrid();
         StatusText.Text = "";
@@ -165,12 +181,16 @@ public partial class MainWindow : Window
             return;
         }
 
+        LogToFile($"PayButton clicked, total={_receipt.TotalSum}");
+
         var payments = new List<TitanPayment>
         {
             new(Sum: _receipt.TotalSum, TypeFlag: 1)
         };
 
         var result = await _closeReceipt.ExecuteAsync(_receipt, payments);
+
+        LogToFile($"CloseReceipt result: success={result.IsSuccess} error={result.Error}");
 
         if (!result.IsSuccess)
         {

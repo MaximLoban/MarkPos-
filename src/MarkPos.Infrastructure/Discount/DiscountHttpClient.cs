@@ -56,7 +56,7 @@ public class DiscountHttpClient : IDiscountClient
         HttpResponseMessage response;
         try
         {
-            response = await _http.PostAsJsonAsync("", envelope, ct);
+            response = await _http.PostAsJsonAsync("MarketPosDiscountPrice", envelope, ct);
         }
         catch (Exception ex)
         {

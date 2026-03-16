@@ -47,38 +47,65 @@ public class RequestDiscountsUseCase
 
     private DiscountRequest BuildRequest(Receipt receipt)
     {
+        var card = receipt.DiscountCard;
+
         var creditGroup = new DiscountCreditGroup(
-     BaseId: _config.BaseId,
-     ShopNumber: _config.ShopNumber,
-     StationNumber: _config.StationNumber,
-     FiscalType: _config.FiscalType,
-     CashboxType: _config.CashboxType,
-     CreditGroupId: "0",
-     IsReturn: "0",
-     IsLast: "1",
-     CreditGroupGUID: Guid.NewGuid().ToString().ToUpper(),
-     StationSaleTypeId: _config.StationSaleTypeId
- );
+            BaseId: _config.BaseId,
+            ShopNumber: _config.ShopNumber,
+            StationNumber: _config.StationNumber,
+            FiscalType: _config.FiscalType,
+            CashboxType: _config.CashboxType,
+            CreditGroupId: "0",
+            WhatBase: "11",
+            DiscountCardId: card?.DiscountCardId.ToString() ?? "0",
+            DiscountCardTypeId: card?.DiscountCardTypeId?.ToString() ?? "0",
+            DiscountCardGroupId: card?.DiscountCardGroupId.ToString() ?? "0",
+            DiscountCardGroupId2: card?.DiscountCardGroupId2?.ToString() ?? "0",
+            DiscountCardNumber: card?.CardNumber ?? "",
+            IsReturn: "0",
+            IsLast: "0",
+            Checkx: "0",
+            OrderGroupTime: "",
+            CreditGroupGUID: Guid.NewGuid().ToString().ToUpper(),
+            StationSaleTypeId: _config.StationSaleTypeId
+        );
 
         var creditItems = receipt.Lines.Select(l => new DiscountCreditItem(
             LineNumber: l.LineNumber.ToString(),
             GoodsId: l.Product.GoodsId.ToString(),
-            DiscountGroupId: l.Product.DiscountGroupId?.ToString() ?? "1",
             GoodsGroupId: l.Product.GoodsGroupId.ToString(),
+            DiscountGroupId: l.Product.DiscountGroupId?.ToString() ?? "1",
+            GoodsTypeId10: "0",
+            Discount: "0",
             Quantity: l.Quantity.ToString("F5"),
+            GoodsMinQuantity: l.Product.GoodsMinQuantity?.ToString("F3") ?? "0",
+            CreditIsReturn: "0",
             Price: l.Price.ToString("F2"),
-            PriceOld: l.PriceOld.ToString("F2")
+            PriceOld: l.PriceOld.ToString("F2"),
+            DiscountPercent: "0",
+            DiscountSum: l.DiscountSum.ToString("F5"),
+            PriceSpecial01: "0",
+            PriceSpecial02: "0",
+            PriceSpecial03: "0",
+            PriceSpecial04: "0",
+            PriceSpecial05: "0",
+            PriceSpecial06: "0",
+            PriceSpecial07: "0",
+            PriceSpecial08: "0",
+            PriceSpecial09: "0",
+            GoodsType: "0",
+            CheckSN: "0"
         )).ToList();
 
         return new DiscountRequest(
-     TokenId: receipt.Id.ToString(),
-     ShopNumber: _config.ShopNumber,
-     StationNumber: _config.StationNumber,
-     DiscountCardId: receipt.DiscountCard?.DiscountCardId.ToString() ?? "0",
-     DiscountCardGroupId: receipt.DiscountCard?.DiscountCardGroupId.ToString() ?? "0",
-     DiscountCardGroupId2: receipt.DiscountCard?.DiscountCardGroupId2?.ToString() ?? "0",
-     CreditGroup: new[] { creditGroup },
-     Credit: creditItems
- );
+            TokenId: receipt.Id.ToString(),
+            ShopNumber: _config.ShopNumber,
+            StationNumber: _config.StationNumber,
+            DiscountCardId: card?.DiscountCardId.ToString() ?? "0",
+            DiscountCardGroupId: card?.DiscountCardGroupId.ToString() ?? "0",
+            DiscountCardGroupId2: card?.DiscountCardGroupId2?.ToString() ?? "0",
+            CreditGroup: new[] { creditGroup },
+            Credit: creditItems
+        );
     }
 }

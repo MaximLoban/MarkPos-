@@ -27,8 +27,16 @@ public record DiscountCreditGroup(
     string FiscalType,
     string CashboxType,
     string CreditGroupId,
+    string WhatBase,
+    string DiscountCardId,
+    string DiscountCardTypeId,
+    string DiscountCardGroupId,
+    string DiscountCardGroupId2,
+    string DiscountCardNumber,
     string IsReturn,
     string IsLast,
+    string Checkx,
+    string OrderGroupTime,
     string CreditGroupGUID,
     string StationSaleTypeId
 );
@@ -36,11 +44,28 @@ public record DiscountCreditGroup(
 public record DiscountCreditItem(
     string LineNumber,
     string GoodsId,
-    string DiscountGroupId,
     string GoodsGroupId,
+    string DiscountGroupId,
+    string GoodsTypeId10,
+    string Discount,
     string Quantity,
+    string GoodsMinQuantity,
+    string CreditIsReturn,
     string Price,
-    string PriceOld
+    string PriceOld,
+    string DiscountPercent,
+    string DiscountSum,
+    string PriceSpecial01,
+    string PriceSpecial02,
+    string PriceSpecial03,
+    string PriceSpecial04,
+    string PriceSpecial05,
+    string PriceSpecial06,
+    string PriceSpecial07,
+    string PriceSpecial08,
+    string PriceSpecial09,
+    string GoodsType,
+    string CheckSN
 );
 
 public record DiscountResponse(
