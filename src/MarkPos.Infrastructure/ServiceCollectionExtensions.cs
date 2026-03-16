@@ -62,7 +62,7 @@ public static class ServiceCollectionExtensions
             parser: sp.GetRequiredService<ScannerParser>(),
             logger: sp.GetRequiredService<ILogger<TcpScannerListener>>()
         ));
-        services.AddHostedService(sp => sp.GetRequiredService<TcpScannerListener>());
+      
 
         return services;
     }

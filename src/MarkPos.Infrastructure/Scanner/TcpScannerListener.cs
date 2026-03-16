@@ -1,33 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MarkPos.Application.Scanner;
+﻿using MarkPos.Application.Scanner;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
-
+using System.Text;
 
 namespace MarkPos.Infrastructure.Scanner;
 
-/// <summary>
-/// Фоновый TCP сервер на порту 60001.
-/// MarketPosDevice подключается как клиент и присылает строки со штрихкодами.
-/// При обрыве соединения — ждёт нового подключения.
-/// </summary>
 public class TcpScannerListener : BackgroundService
 {
     private readonly int _port;
     private readonly ScannerParser _parser;
     private readonly ILogger<TcpScannerListener> _logger;
+    private static readonly object _logLock = new();
 
-    /// <summary>
-    /// Событие срабатывает когда от сканера пришло распознанное сообщение.
-    /// UI подписывается на это событие.
-    /// </summary>
     public event Action<ScannerMessage>? MessageReceived;
 
     public TcpScannerListener(int port, ScannerParser parser, ILogger<TcpScannerListener> logger)
@@ -39,32 +25,40 @@ public class TcpScannerListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
-        var listener = new TcpListener(IPAddress.Any, _port);
-        listener.Start();
-        _logger.LogInformation("TCP сканер слушает порт {Port}", _port);
-
-        while (!ct.IsCancellationRequested)
+        LogToFile($"ExecuteAsync запущен, порт {_port}");
+        try
         {
-            try
-            {
-                var client = await listener.AcceptTcpClientAsync(ct);
-                _logger.LogInformation("MarketPosDevice подключился");
+            var listener = new TcpListener(IPAddress.Any, _port);
+            listener.Start();
+            LogToFile($"TcpListener запущен на порту {_port}");
 
-                // Каждое подключение обрабатываем в отдельной задаче
-                _ = HandleClientAsync(client, ct);
-            }
-            catch (OperationCanceledException)
+            while (!ct.IsCancellationRequested)
             {
-                break;
+                try
+                {
+                    LogToFile("Ожидаем подключения...");
+                    var client = await listener.AcceptTcpClientAsync(ct);
+                    LogToFile("MarketPosDevice подключился!");
+                    _ = HandleClientAsync(client, ct);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    LogToFile($"Ошибка при ожидании: {ex.Message}");
+                    await Task.Delay(1000, ct);
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка при ожидании подключения сканера");
-                await Task.Delay(1000, ct);
-            }
+
+            listener.Stop();
         }
-
-        listener.Stop();
+        catch (Exception ex)
+        {
+            LogToFile($"КРИТИЧЕСКАЯ ОШИБКА: {ex}");
+            throw;
+        }
     }
 
     private async Task HandleClientAsync(TcpClient client, CancellationToken ct)
@@ -81,22 +75,35 @@ public class TcpScannerListener : BackgroundService
 
                 if (line == null)
                 {
-                    _logger.LogInformation("MarketPosDevice отключился");
+                    LogToFile("MarketPosDevice отключился");
                     break;
                 }
 
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                _logger.LogDebug("Получена строка от сканера: {Line}", line);
+                LogToFile($"Получена строка: [{line}]");
+                LogToFile($"Подписчиков: {MessageReceived?.GetInvocationList().Length ?? 0}");
 
                 var message = _parser.Parse(line);
+                LogToFile($"Распознано: {message.GetType().Name}");
+
                 MessageReceived?.Invoke(message);
             }
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            _logger.LogWarning("Соединение со сканером прервано: {Message}", ex.Message);
+            LogToFile($"Соединение прервано: {ex.Message}");
+        }
+    }
+
+    private static void LogToFile(string message)
+    {
+        lock (_logLock)
+        {
+            File.AppendAllText(@"D:\NewPos\scanner.log",
+                $"{DateTime.Now:HH:mm:ss.fff} {message}\r\n",
+                new UTF8Encoding(false));
         }
     }
 }

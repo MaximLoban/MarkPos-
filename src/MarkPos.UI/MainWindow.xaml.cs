@@ -3,6 +3,8 @@ using MarkPos.Application.Scanner;
 using MarkPos.Application.UseCases;
 using MarkPos.Domain.Entities;
 using MarkPos.Infrastructure.Scanner;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
@@ -35,40 +37,45 @@ public partial class MainWindow : Window
         BarcodeInput.Focus();
     }
 
-    // ── Обработка сообщений от сканера ───────────────────────────────────────
-
     private void OnScannerMessage(ScannerMessage message)
     {
-        // Все обновления UI должны идти через Dispatcher
+        LogToFile($"OnScannerMessage: {message.GetType().Name}");
+
         Dispatcher.InvokeAsync(async () =>
         {
-            switch (message)
+            try
             {
-                case BarcodeMessage barcodeMsg:
-                    await AddByBarcodeAsync(barcodeMsg.Barcode);
-                    break;
+                switch (message)
+                {
+                    case BarcodeMessage barcodeMsg:
+                        LogToFile($"Добавляем штрихкод: {barcodeMsg.Barcode}");
+                        await AddByBarcodeAsync(barcodeMsg.Barcode);
+                        break;
 
-                case WeightBarcodeMessage weightMsg:
-                    await AddByBarcodeAsync(weightMsg.Barcode, weightMsg.Quantity);
-                    break;
+                    case WeightBarcodeMessage weightMsg:
+                        await AddByBarcodeAsync(weightMsg.Barcode, weightMsg.Quantity);
+                        break;
 
-                case DiscountCardMessage cardMsg:
-                    StatusText.Text = $"Дисконтная карта: {cardMsg.CardNumber}";
-                    // TODO: обработка дисконтной карты
-                    break;
+                    case DiscountCardMessage cardMsg:
+                        StatusText.Text = $"Дисконтная карта: {cardMsg.CardNumber}";
+                        break;
 
-                case AdvertisingQrMessage:
-                    StatusText.Text = "Отсканируйте другой QR-код. Данный QR содержит рекламу.";
-                    break;
+                    case AdvertisingQrMessage:
+                        StatusText.Text = "Данный QR содержит рекламу.";
+                        break;
 
-                case InvalidBarcodeMessage invalidMsg:
-                    StatusText.Text = invalidMsg.Reason;
-                    break;
+                    case InvalidBarcodeMessage invalidMsg:
+                        StatusText.Text = invalidMsg.Reason;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogToFile($"ОШИБКА в Dispatcher: {ex.Message}");
+                StatusText.Text = $"Ошибка: {ex.Message}";
             }
         });
     }
-
-    // ── Сканирование вручную ─────────────────────────────────────────────────
 
     private async void BarcodeInput_KeyDown(object sender, KeyEventArgs e)
     {
@@ -101,8 +108,6 @@ public partial class MainWindow : Window
         await RequestDiscountsAsync();
     }
 
-    // ── Скидки ───────────────────────────────────────────────────────────────
-
     private async Task RequestDiscountsAsync()
     {
         _discountCts?.Cancel();
@@ -121,8 +126,6 @@ public partial class MainWindow : Window
         }
     }
 
-    // ── Удаление позиции ─────────────────────────────────────────────────────
-
     private async void RemoveButton_Click(object sender, RoutedEventArgs e)
     {
         if (LinesGrid.SelectedItem is not ReceiptLine line) return;
@@ -131,8 +134,6 @@ public partial class MainWindow : Window
         RefreshGrid();
         await RequestDiscountsAsync();
     }
-
-    // ── Отмена чека ──────────────────────────────────────────────────────────
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
@@ -147,8 +148,6 @@ public partial class MainWindow : Window
         StatusText.Text = "";
         BarcodeInput.Focus();
     }
-
-    // ── Оплата ───────────────────────────────────────────────────────────────
 
     private async void PayButton_Click(object sender, RoutedEventArgs e)
     {
@@ -182,8 +181,6 @@ public partial class MainWindow : Window
         BarcodeInput.Focus();
     }
 
-    // ── Обновление UI ────────────────────────────────────────────────────────
-
     private void RefreshGrid()
     {
         LinesGrid.ItemsSource = null;
@@ -195,5 +192,12 @@ public partial class MainWindow : Window
             DiscountText.Text = $"Скидка: -{_receipt.DiscountSum:F2} BYN";
         else
             DiscountText.Text = "";
+    }
+
+    private static void LogToFile(string message)
+    {
+        File.AppendAllText(@"D:\NewPos\scanner.log",
+            $"{DateTime.Now:HH:mm:ss.fff} {message}\r\n",
+            new UTF8Encoding(false));
     }
 }

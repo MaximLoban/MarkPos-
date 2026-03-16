@@ -2,9 +2,12 @@
 using MarkPos.Application.Interfaces;
 using MarkPos.Infrastructure;
 using MarkPos.Infrastructure.Persistence;
+using MarkPos.Infrastructure.Scanner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Text;
 using System.Windows;
 
 namespace MarkPos.UI;
@@ -13,7 +16,7 @@ public partial class App : System.Windows.Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
@@ -26,11 +29,16 @@ public partial class App : System.Windows.Application
         try
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
             var services = new ServiceCollection();
+
+            services.AddLogging(builder => builder
+                .AddConsole()
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Debug));
 
             services.AddMarkPosInfrastructure(
                 connectionString: config["Database:MainConnection"]!,
@@ -53,6 +61,16 @@ public partial class App : System.Windows.Application
             services.AddTransient<MainWindow>();
 
             Services = services.BuildServiceProvider();
+
+            var scanner = Services.GetRequiredService<TcpScannerListener>();
+            var cts = new CancellationTokenSource();
+            _ = scanner.StartAsync(cts.Token);
+
+            File.AppendAllText(@"D:\NewPos\scanner.log",
+                $"{DateTime.Now:HH:mm:ss} StartAsync вызван\r\n",
+                new UTF8Encoding(false));
+
+            await Task.Delay(500);
 
             var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
