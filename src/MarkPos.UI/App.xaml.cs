@@ -41,21 +41,22 @@ public partial class App : System.Windows.Application
                 .SetMinimumLevel(LogLevel.Debug));
 
             services.AddMarkPosInfrastructure(
-                connectionString: config["Database:MainConnection"]!,
-                discountUrl: config["Discount:Url"]!,
-                titanPosUrl: config["TitanPos:Url"]!,
-                titanInitialKey: config["TitanPos:InitialKey"]!,
-                stationConfig: new StationConfig
-                {
-                    ShopNumber = config["Station:ShopNumber"]!,
-                    StationNumber = config["Station:StationNumber"]!,
-                    FiscalType = config["Station:FiscalType"]!,
-                    CashboxType = config["Station:CashboxType"]!,
-                    StationSaleTypeId = config["Station:StationSaleTypeId"]!,
-                    BaseId = config["Station:BaseId"]!
-                },
-                scannerPort: int.Parse(config["Scanner:Port"]!)
-            );
+     connectionString: config["Database:MainConnection"]!,
+     discountDbConnection: config["Database:DiscountConnection"]!,
+     discountUrl: config["Discount:Url"]!,
+     titanPosUrl: config["TitanPos:Url"]!,
+     titanInitialKey: config["TitanPos:InitialKey"]!,
+     stationConfig: new StationConfig
+     {
+         ShopNumber = config["Station:ShopNumber"]!,
+         StationNumber = config["Station:StationNumber"]!,
+         FiscalType = config["Station:FiscalType"]!,
+         CashboxType = config["Station:CashboxType"]!,
+         StationSaleTypeId = config["Station:StationSaleTypeId"]!,
+         BaseId = config["Station:BaseId"]!
+     },
+     scannerPort: int.Parse(config["Scanner:Port"]!)
+ );
 
             services.AddSingleton<IReceiptRepository, ReceiptRepository>();
             services.AddTransient<MainWindow>();

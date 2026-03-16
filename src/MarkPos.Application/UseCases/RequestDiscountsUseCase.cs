@@ -48,17 +48,17 @@ public class RequestDiscountsUseCase
     private DiscountRequest BuildRequest(Receipt receipt)
     {
         var creditGroup = new DiscountCreditGroup(
-            BaseId: "1",
-            ShopNumber: _config.ShopNumber,
-            StationNumber: _config.StationNumber,
-            FiscalType: _config.FiscalType,
-            CashboxType: _config.CashboxType,
-            CreditGroupId: "0",
-            IsReturn: "0",
-            IsLast: "1",
-            CreditGroupGUID: Guid.NewGuid().ToString().ToUpper(),
-            StationSaleTypeId: _config.StationSaleTypeId
-        );
+     BaseId: _config.BaseId,
+     ShopNumber: _config.ShopNumber,
+     StationNumber: _config.StationNumber,
+     FiscalType: _config.FiscalType,
+     CashboxType: _config.CashboxType,
+     CreditGroupId: "0",
+     IsReturn: "0",
+     IsLast: "1",
+     CreditGroupGUID: Guid.NewGuid().ToString().ToUpper(),
+     StationSaleTypeId: _config.StationSaleTypeId
+ );
 
         var creditItems = receipt.Lines.Select(l => new DiscountCreditItem(
             LineNumber: l.LineNumber.ToString(),
@@ -71,11 +71,14 @@ public class RequestDiscountsUseCase
         )).ToList();
 
         return new DiscountRequest(
-            TokenId: receipt.Id.ToString(),
-            ShopNumber: _config.ShopNumber,
-            StationNumber: _config.StationNumber,
-            CreditGroup: new[] { creditGroup },
-            Credit: creditItems
-        );
+     TokenId: receipt.Id.ToString(),
+     ShopNumber: _config.ShopNumber,
+     StationNumber: _config.StationNumber,
+     DiscountCardId: receipt.DiscountCard?.DiscountCardId.ToString() ?? "0",
+     DiscountCardGroupId: receipt.DiscountCard?.DiscountCardGroupId.ToString() ?? "0",
+     DiscountCardGroupId2: receipt.DiscountCard?.DiscountCardGroupId2?.ToString() ?? "0",
+     CreditGroup: new[] { creditGroup },
+     Credit: creditItems
+ );
     }
 }

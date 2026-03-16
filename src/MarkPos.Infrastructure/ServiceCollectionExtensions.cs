@@ -19,12 +19,17 @@ public static class ServiceCollectionExtensions
         string discountUrl,
         string titanPosUrl,
         string titanInitialKey,
+        string discountDbConnection,
         StationConfig stationConfig,
         int scannerPort)
     {
         // Persistence
         services.AddSingleton<IProductRepository>(
             _ => new ProductRepository(connectionString));
+
+        services.AddSingleton<IDiscountCardRepository>(
+        _ => new DiscountCardRepository(discountDbConnection));
+        services.AddTransient<AttachDiscountCardUseCase>();
 
         // Discount HTTP client
         services.AddHttpClient<IDiscountClient, DiscountHttpClient>(client =>

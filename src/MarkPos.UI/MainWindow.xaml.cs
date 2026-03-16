@@ -19,18 +19,21 @@ public partial class MainWindow : Window
 
     private Receipt _receipt = Receipt.New(1);
     private CancellationTokenSource? _discountCts;
+    private readonly AttachDiscountCardUseCase _attachDiscountCard;
 
     public MainWindow(
-        AddItemByBarcodeUseCase addItem,
-        RequestDiscountsUseCase requestDiscounts,
-        CloseReceiptUseCase closeReceipt,
-        TcpScannerListener scanner)
+     AddItemByBarcodeUseCase addItem,
+     RequestDiscountsUseCase requestDiscounts,
+     CloseReceiptUseCase closeReceipt,
+     TcpScannerListener scanner,
+     AttachDiscountCardUseCase attachDiscountCard)
     {
         InitializeComponent();
         _addItem = addItem;
         _requestDiscounts = requestDiscounts;
         _closeReceipt = closeReceipt;
         _scanner = scanner;
+        _attachDiscountCard = attachDiscountCard;
 
         _scanner.MessageReceived += OnScannerMessage;
 
@@ -57,7 +60,12 @@ public partial class MainWindow : Window
                         break;
 
                     case DiscountCardMessage cardMsg:
-                        StatusText.Text = $"Дисконтная карта: {cardMsg.CardNumber}";
+                        LogToFile($"Дисконтная карта: {cardMsg.CardNumber}");
+                        var cardResult = await _attachDiscountCard.ExecuteAsync(_receipt, cardMsg.CardNumber);
+                        if (cardResult.IsSuccess)
+                            StatusText.Text = $"Карта принята: {cardMsg.CardNumber}";
+                        else
+                            StatusText.Text = cardResult.Error!;
                         break;
 
                     case AdvertisingQrMessage:

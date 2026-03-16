@@ -85,8 +85,10 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\zh-Hans\Microsoft.
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Domain.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Domain.pdb
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.csproj.AssemblyReference.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.GeneratedMSBuildEditorConfig.editorconfig
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.AssemblyInfoInputs.cache
@@ -98,5 +100,3 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\refint\MarkPos.Dom
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.genruntimeconfig.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\ref\MarkPos.Domain.Tests.dll
-D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.dll
-D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Application.pdb

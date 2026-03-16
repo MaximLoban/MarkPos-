@@ -99,6 +99,17 @@ public class Receipt
         Status = ReceiptStatus.Closed;
         return Result.Ok();
     }
+    public DiscountCard? DiscountCard { get; private set; }
+
+    public Result AttachDiscountCard(DiscountCard card)
+    {
+        if (Status == ReceiptStatus.Closed)
+            return Result.Failure("Нельзя изменять закрытый чек");
+
+        DiscountCard = card;
+        Status = ReceiptStatus.Draft; // Пересчитать скидки
+        return Result.Ok();
+    }
 }
 
 public enum ReceiptStatus

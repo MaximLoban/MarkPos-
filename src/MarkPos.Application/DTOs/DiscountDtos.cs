@@ -14,10 +14,12 @@ public record DiscountRequest(
     string TokenId,
     string ShopNumber,
     string StationNumber,
+    string DiscountCardId,
+    string DiscountCardGroupId,
+    string DiscountCardGroupId2,
     IReadOnlyList<DiscountCreditGroup> CreditGroup,
     IReadOnlyList<DiscountCreditItem> Credit
 );
-
 public record DiscountCreditGroup(
     string BaseId,
     string ShopNumber,
