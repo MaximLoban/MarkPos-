@@ -92,10 +92,16 @@
                             BorderThickness="0"
                             Cursor="Hand"/>
                 </Grid>
-                <TextBlock Text="{Binding StatusText}"
-                           Foreground="#FF6B6B"
-                           FontSize="14"
-                           Margin="0,8,0,0"/>
+                <TextBox Text="{Binding StatusText, Mode=OneWay}"
+         Foreground="#FF6B6B"
+         FontSize="14"
+         Margin="0,8,0,0"
+         IsReadOnly="True"
+         IsTabStop="False"
+         Background="Transparent"
+         BorderThickness="0"
+         TextWrapping="Wrap"
+         Cursor="IBeam"/>
             </StackPanel>
 
             <!-- Итог -->

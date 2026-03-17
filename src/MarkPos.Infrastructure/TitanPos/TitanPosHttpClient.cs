@@ -1,9 +1,9 @@
 ﻿using MarkPos.Application.DTOs;
 using MarkPos.Application.Interfaces;
 using MarkPos.Domain.ValueObjects;
-using System.Net.Http.Json;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace MarkPos.Infrastructure.TitanPos;
 
@@ -11,9 +11,8 @@ public class TitanPosHttpClient : ITitanPosClient
 {
     private readonly HttpClient _http;
     private string _titanKey;
-
-    // TitanPOS не поддерживает параллельные запросы — только один за раз
     private readonly SemaphoreSlim _lock = new(1, 1);
+    private static readonly object _logLock = new();
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -24,21 +23,40 @@ public class TitanPosHttpClient : ITitanPosClient
     {
         _http = http;
         _titanKey = initialKey;
+        Log($"создан, initialKey=[{initialKey}]");
     }
+
+    // ── Public API ────────────────────────────────────────────────────────────
 
     public async Task<Result> InitAsync(CancellationToken ct = default)
     {
+        Log("InitAsync вызван");
         var response = await SendAsync<TitanBaseResponse>("init", new { }, ct);
         return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
     }
 
     public async Task<Result> OpenSessionAsync(string pin, string cashierName, CancellationToken ct = default)
     {
+        Log($"OpenSessionAsync: cashier=[{cashierName}]");
         var response = await SendAsync<TitanBaseResponse>("open", new
         {
             Pin = pin,
             Cashier = cashierName
         }, ct);
+        return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
+    }
+
+    public async Task<Result> OpenShiftAsync(CancellationToken ct = default)
+    {
+        Log("OpenShiftAsync вызван");
+        var response = await SendAsync<TitanBaseResponse>("openShift", new { }, ct);
+        return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
+    }
+
+    public async Task<Result> CloseShiftAsync(CancellationToken ct = default)
+    {
+        Log("CloseShiftAsync вызван");
+        var response = await SendAsync<TitanBaseResponse>("closeShift", new { }, ct);
         return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
     }
 
@@ -72,7 +90,6 @@ public class TitanPosHttpClient : ITitanPosClient
         };
 
         var response = await SendAsync<TitanCheckResponse>("check", body, ct);
-
         if (!response.IsSuccess)
             return Result<TitanCheckResult>.Failure(response.Error!);
 
@@ -87,6 +104,7 @@ public class TitanPosHttpClient : ITitanPosClient
 
     public async Task<Result> CloseSessionAsync(CancellationToken ct = default)
     {
+        Log("CloseSessionAsync вызван");
         var response = await SendAsync<TitanBaseResponse>("close", new { }, ct);
         return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
     }
@@ -94,7 +112,6 @@ public class TitanPosHttpClient : ITitanPosClient
     public async Task<Result<TitanPosInfo>> GetInfoAsync(CancellationToken ct = default)
     {
         var response = await SendAsync<TitanInfoResponse>("info", new { }, ct);
-
         if (!response.IsSuccess)
             return Result<TitanPosInfo>.Failure(response.Error!);
 
@@ -108,7 +125,7 @@ public class TitanPosHttpClient : ITitanPosClient
         ));
     }
 
-    // ── Общий метод отправки ─────────────────────────────────────────────────
+    // ── Отправка ──────────────────────────────────────────────────────────────
 
     private async Task<Result<T>> SendAsync<T>(
         string operation, object body, CancellationToken ct) where T : TitanBaseResponse
@@ -116,11 +133,20 @@ public class TitanPosHttpClient : ITitanPosClient
         await _lock.WaitAsync(ct);
         try
         {
-            // Добавляем текущий TitanKey к каждому запросу
-            var payload = AddTitanKey(body);
+            var bodyJson = JsonSerializer.Serialize(body);
+            var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(bodyJson)!;
+            dict["TitanKey"] = _titanKey;
+            var payloadJson = JsonSerializer.Serialize(dict);
 
-            var httpResponse = await _http.PostAsJsonAsync(operation, payload, ct);
+            Log($"→ op={operation} body={payloadJson}");
+
+            var httpContent = new StringContent(payloadJson, Encoding.UTF8);
+            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var httpResponse = await _http.PostAsync(operation, httpContent, ct);
             var content = await httpResponse.Content.ReadAsStringAsync(ct);
+
+            Log($"← op={operation} http={httpResponse.StatusCode} body={content}");
 
             T? result;
             try
@@ -137,13 +163,13 @@ public class TitanPosHttpClient : ITitanPosClient
 
             if (result.Status == 0)
             {
-                // Обновляем ключ только при успехе
+                Log($"✓ op={operation} новый ключ=[{result.TitanKey}]");
                 if (!string.IsNullOrEmpty(result.TitanKey))
                     _titanKey = result.TitanKey;
-
                 return Result<T>.Ok(result);
             }
 
+            Log($"✗ op={operation} status={result.Status} error=[{result.Error}]");
             return Result<T>.Failure($"TitanPOS ошибка {result.Status}: {result.Error}");
         }
         finally
@@ -152,16 +178,17 @@ public class TitanPosHttpClient : ITitanPosClient
         }
     }
 
-    private object AddTitanKey(object body)
+    // ── Лог ───────────────────────────────────────────────────────────────────
+
+    private static void Log(string msg)
     {
-        // Сериализуем body, добавляем TitanKey и десериализуем обратно в словарь
-        var json = JsonSerializer.Serialize(body);
-        var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(json)!;
-        dict["TitanKey"] = _titanKey;
-        return dict;
+        lock (_logLock)
+            File.AppendAllText(@"D:\NewPos\scanner.log",
+                $"{DateTime.Now:HH:mm:ss.fff} [TitanPOS] {msg}\r\n",
+                new UTF8Encoding(false));
     }
 
-    // ── Response модели ──────────────────────────────────────────────────────
+    // ── Response модели ───────────────────────────────────────────────────────
 
     private class TitanBaseResponse
     {

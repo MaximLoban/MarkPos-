@@ -45,7 +45,7 @@ public class CloseReceiptUseCase
                 GoodsName: l.Product.Name,
                 Barcode: l.Product.Gtin ?? l.Product.Barcode,
                 CodeType: l.Product.TitanCodeType,
-                Price: l.Price,
+                Price: l.PriceOld,
                 Quantity: l.Quantity,
                 DiscountSum: l.DiscountSum,
                 TotalSum: l.TotalSum

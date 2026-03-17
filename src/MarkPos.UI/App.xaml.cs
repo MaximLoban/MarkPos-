@@ -1,6 +1,6 @@
 ﻿using MarkPos.Application;
 using MarkPos.Application.Interfaces;
-using MarkPos.Application.Session;          // ← НОВЫЙ using
+using MarkPos.Application.Session;
 using MarkPos.Infrastructure;
 using MarkPos.Infrastructure.Persistence;
 using MarkPos.Infrastructure.Scanner;
@@ -60,20 +60,61 @@ public partial class App : System.Windows.Application
             );
 
             services.AddSingleton<IReceiptRepository, ReceiptRepository>();
-
-            // ── UI слой ───────────────────────────────────────────────────────
-            services.AddTransient<MainViewModel>();  // ← НОВОЕ
+            services.AddTransient<MainViewModel>();
             services.AddTransient<MainWindow>();
-            // ─────────────────────────────────────────────────────────────────
 
             Services = services.BuildServiceProvider();
 
+            // ── Запуск сканера ────────────────────────────────────────────────
             var scanner = Services.GetRequiredService<TcpScannerListener>();
             var cts = new CancellationTokenSource();
             _ = scanner.StartAsync(cts.Token);
 
+            // ── Инициализация TitanPOS ────────────────────────────────────────
+            var titanPos = Services.GetRequiredService<ITitanPosClient>();
+
+            var initResult = await titanPos.InitAsync();
+            if (!initResult.IsSuccess)
+            {
+                ShowError($"TitanPOS недоступен: {initResult.Error}\n\nПроверьте что TitanPOS запущен на {config["TitanPos:Url"]}");
+                Shutdown();
+                return;
+            }
+
+            var openResult = await titanPos.OpenSessionAsync(
+                pin: config["TitanPos:CashierPin"]!,
+                cashierName: config["TitanPos:CashierName"]!
+            );
+            if (!openResult.IsSuccess)
+            {
+                ShowError($"Не удалось открыть сеанс: {openResult.Error}");
+                Shutdown();
+                return;
+            }
+
+            // Открываем смену если она ещё не открыта
+            var infoResult = await titanPos.GetInfoAsync();
+            if (!infoResult.IsSuccess)
+            {
+                ShowError($"Не удалось получить статус TitanPOS: {infoResult.Error}");
+                Shutdown();
+                return;
+            }
+
+            if (!infoResult.Value!.ShiftOpened)
+            {
+                var shiftResult = await titanPos.OpenShiftAsync();
+                if (!shiftResult.IsSuccess)
+                {
+                    ShowError($"Не удалось открыть смену: {shiftResult.Error}");
+                    Shutdown();
+                    return;
+                }
+            }
+            // ─────────────────────────────────────────────────────────────────
+
             File.AppendAllText(@"D:\NewPos\scanner.log",
-                $"{DateTime.Now:HH:mm:ss} StartAsync вызван\r\n",
+                $"{DateTime.Now:HH:mm:ss} TitanPOS готов, смена открыта\r\n",
                 new UTF8Encoding(false));
 
             await Task.Delay(500);
