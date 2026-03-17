@@ -36,6 +36,9 @@ public static class ServiceCollectionExtensions
         {
             client.BaseAddress = new Uri(discountUrl);
             client.Timeout = TimeSpan.FromSeconds(5);
+        }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
         });
 
         // TitanPOS HTTP client

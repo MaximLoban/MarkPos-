@@ -1,15 +1,10 @@
 ﻿using MarkPos.Application.DTOs;
 using MarkPos.Application.Interfaces;
 using MarkPos.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
+using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
 
 namespace MarkPos.Infrastructure.Discount;
 
@@ -17,9 +12,14 @@ public class DiscountHttpClient : IDiscountClient
 {
     private readonly HttpClient _http;
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions DeserializeOptions = new()
     {
         PropertyNameCaseInsensitive = true
+    };
+
+    private static readonly JsonSerializerOptions SerializeOptions = new()
+    {
+        PropertyNamingPolicy = null
     };
 
     public DiscountHttpClient(HttpClient http)
@@ -53,29 +53,40 @@ public class DiscountHttpClient : IDiscountClient
             }
         };
 
+        var json = JsonSerializer.Serialize(envelope, SerializeOptions);
+        LogToFile($"URL: {_http.BaseAddress}MarketPosDiscountPrice");
+        LogToFile($"Request: {json}");
+
+        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
         HttpResponseMessage response;
         try
         {
-            response = await _http.PostAsJsonAsync("MarketPosDiscountPrice", envelope, ct);
+            response = await _http.PostAsync("/MarketPosDiscountPrice", httpContent, ct);
         }
         catch (Exception ex)
         {
+            LogToFile($"HTTP error: {ex.Message}");
             return Result<DiscountResponse>.Failure($"Дисконтный модуль недоступен: {ex.Message}");
         }
+
+        LogToFile($"HTTP status: {(int)response.StatusCode}");
 
         if (!response.IsSuccessStatusCode)
             return Result<DiscountResponse>.Failure(
                 $"Дисконтный модуль вернул {(int)response.StatusCode}");
 
-        var content = await response.Content.ReadAsStringAsync(ct);
+        var responseContent = await response.Content.ReadAsStringAsync(ct);
+        LogToFile($"Response: {responseContent}");
 
         DiscountResponse? result;
         try
         {
-            result = JsonSerializer.Deserialize<DiscountResponse>(content, JsonOptions);
+            result = JsonSerializer.Deserialize<DiscountResponse>(responseContent, DeserializeOptions);
         }
         catch (Exception ex)
         {
+            LogToFile($"Parse error: {ex.Message}");
             return Result<DiscountResponse>.Failure($"Ошибка разбора ответа: {ex.Message}");
         }
 
@@ -83,5 +94,12 @@ public class DiscountHttpClient : IDiscountClient
             return Result<DiscountResponse>.Failure("Пустой ответ от дисконтного модуля");
 
         return Result<DiscountResponse>.Ok(result);
+    }
+
+    private static void LogToFile(string message)
+    {
+        File.AppendAllText(@"D:\NewPos\scanner.log",
+            $"{DateTime.Now:HH:mm:ss.fff} [DM] {message}\r\n",
+            new UTF8Encoding(false));
     }
 }

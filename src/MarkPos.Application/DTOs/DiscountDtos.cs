@@ -77,6 +77,7 @@ public record DiscountResponseLine(
     string LineNumber,
     string GoodsId,
     string Price,
+    string PriceOld,
     string Quantity,
     string SumAdd,
     string CoinsAdd,

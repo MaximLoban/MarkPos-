@@ -5,6 +5,18 @@
         WindowState="Maximized"
         Background="#1E1E2E">
 
+    <Window.Resources>
+        <Style x:Key="ColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#1a1a2e"/>
+            <Setter Property="Foreground" Value="#00d4ff"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#555"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,6 +42,7 @@
                   BorderBrush="#555"
                   GridLinesVisibility="Horizontal"
                   HeadersVisibility="Column"
+                  ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
                   FontSize="16">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№" Binding="{Binding LineNumber}" Width="50"/>

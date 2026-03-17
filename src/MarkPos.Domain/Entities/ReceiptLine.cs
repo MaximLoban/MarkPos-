@@ -20,7 +20,7 @@ public class ReceiptLine
     public decimal DiscountSum { get; private set; }
     public decimal SumAdd { get; private set; }
 
-    public decimal TotalSum => Math.Round(Price * Quantity - DiscountSum + SumAdd, 5);
+    public decimal TotalSum => Math.Round(Price * Quantity + SumAdd, 5);
 
     internal ReceiptLine(int lineNumber, Product product, decimal quantity)
     {

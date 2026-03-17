@@ -8,6 +8,7 @@ using MarkPos.Application.DTOs;
 using MarkPos.Application.Interfaces;
 using MarkPos.Domain.Entities;
 using MarkPos.Domain.ValueObjects;
+using System.Globalization;
 
 namespace MarkPos.Application.UseCases;
 
@@ -34,13 +35,27 @@ public class RequestDiscountsUseCase
             return Result.Failure(response.Error!);
 
         var discountResults = response.Value!.Credit
-            .Select(c => new DiscountLineResult(
-                LineNumber: int.Parse(c.LineNumber),
-                Price: decimal.Parse(c.Price, System.Globalization.CultureInfo.InvariantCulture),
-                DiscountSum: decimal.Parse(c.DiscountOut, System.Globalization.CultureInfo.InvariantCulture),
-                SumAdd: decimal.Parse(c.SumAdd, System.Globalization.CultureInfo.InvariantCulture),
-                DiscountOutDescription: c.DiscountOutDescription))
-            .ToList();
+     .Select(c =>
+     {
+         var newPrice = decimal.Parse(c.Price, System.Globalization.CultureInfo.InvariantCulture);
+         var sumAdd = decimal.Parse(c.SumAdd, System.Globalization.CultureInfo.InvariantCulture);
+
+         // Находим строку чека чтобы взять количество
+         var line = receipt.Lines.FirstOrDefault(l => l.LineNumber == int.Parse(c.LineNumber));
+         var quantity = line?.Quantity ?? 1;
+         var priceOld = line?.PriceOld ?? newPrice;
+
+         // Скидка = (старая цена - новая цена) * количество
+         var discountSum = (priceOld - newPrice) * quantity;
+
+         return new DiscountLineResult(
+             LineNumber: int.Parse(c.LineNumber),
+             Price: newPrice,
+             DiscountSum: discountSum < 0 ? 0 : discountSum,
+             SumAdd: sumAdd,
+             DiscountOutDescription: c.DiscountOutDescription);
+     })
+     .ToList();
 
         return receipt.ApplyDiscounts(discountResults);
     }
@@ -77,13 +92,13 @@ public class RequestDiscountsUseCase
             DiscountGroupId: l.Product.DiscountGroupId?.ToString() ?? "1",
             GoodsTypeId10: "0",
             Discount: "0",
-            Quantity: l.Quantity.ToString("F5"),
-            GoodsMinQuantity: l.Product.GoodsMinQuantity?.ToString("F3") ?? "0",
+            Quantity: l.Quantity.ToString("F5", CultureInfo.InvariantCulture),
+            GoodsMinQuantity: l.Product.GoodsMinQuantity?.ToString("F3", CultureInfo.InvariantCulture) ?? "0",
             CreditIsReturn: "0",
-            Price: l.Price.ToString("F2"),
-            PriceOld: l.PriceOld.ToString("F2"),
+            Price: l.Price.ToString("F2", CultureInfo.InvariantCulture),
+            PriceOld: l.PriceOld.ToString("F2", CultureInfo.InvariantCulture),
             DiscountPercent: "0",
-            DiscountSum: l.DiscountSum.ToString("F5"),
+            DiscountSum: l.DiscountSum.ToString("F5", CultureInfo.InvariantCulture),
             PriceSpecial01: "0",
             PriceSpecial02: "0",
             PriceSpecial03: "0",
