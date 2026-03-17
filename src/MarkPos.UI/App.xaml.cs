@@ -1,5 +1,6 @@
 ﻿using MarkPos.Application;
 using MarkPos.Application.Interfaces;
+using MarkPos.Application.Session;          // ← НОВЫЙ using
 using MarkPos.Infrastructure;
 using MarkPos.Infrastructure.Persistence;
 using MarkPos.Infrastructure.Scanner;
@@ -41,25 +42,29 @@ public partial class App : System.Windows.Application
                 .SetMinimumLevel(LogLevel.Debug));
 
             services.AddMarkPosInfrastructure(
-     connectionString: config["Database:MainConnection"]!,
-     discountDbConnection: config["Database:DiscountConnection"]!,
-     discountUrl: config["Discount:Url"]!,
-     titanPosUrl: config["TitanPos:Url"]!,
-     titanInitialKey: config["TitanPos:InitialKey"]!,
-     stationConfig: new StationConfig
-     {
-         ShopNumber = config["Station:ShopNumber"]!,
-         StationNumber = config["Station:StationNumber"]!,
-         FiscalType = config["Station:FiscalType"]!,
-         CashboxType = config["Station:CashboxType"]!,
-         StationSaleTypeId = config["Station:StationSaleTypeId"]!,
-         BaseId = config["Station:BaseId"]!
-     },
-     scannerPort: int.Parse(config["Scanner:Port"]!)
- );
+                connectionString: config["Database:MainConnection"]!,
+                discountDbConnection: config["Database:DiscountConnection"]!,
+                discountUrl: config["Discount:Url"]!,
+                titanPosUrl: config["TitanPos:Url"]!,
+                titanInitialKey: config["TitanPos:InitialKey"]!,
+                stationConfig: new StationConfig
+                {
+                    ShopNumber = config["Station:ShopNumber"]!,
+                    StationNumber = config["Station:StationNumber"]!,
+                    FiscalType = config["Station:FiscalType"]!,
+                    CashboxType = config["Station:CashboxType"]!,
+                    StationSaleTypeId = config["Station:StationSaleTypeId"]!,
+                    BaseId = config["Station:BaseId"]!
+                },
+                scannerPort: int.Parse(config["Scanner:Port"]!)
+            );
 
             services.AddSingleton<IReceiptRepository, ReceiptRepository>();
+
+            // ── UI слой ───────────────────────────────────────────────────────
+            services.AddTransient<MainViewModel>();  // ← НОВОЕ
             services.AddTransient<MainWindow>();
+            // ─────────────────────────────────────────────────────────────────
 
             Services = services.BuildServiceProvider();
 

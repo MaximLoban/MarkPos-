@@ -15,6 +15,7 @@
             <Setter Property="BorderBrush" Value="#555"/>
             <Setter Property="BorderThickness" Value="0,0,1,1"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
     <Grid Margin="20">
@@ -33,6 +34,7 @@
         <!-- Список товаров -->
         <DataGrid Grid.Row="1"
                   x:Name="LinesGrid"
+                  ItemsSource="{Binding Lines}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   Background="#2E2E3E"
@@ -45,12 +47,12 @@
                   ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
                   FontSize="16">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="№" Binding="{Binding LineNumber}" Width="50"/>
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Product.Name}" Width="*"/>
-                <DataGridTextColumn Header="Кол-во" Binding="{Binding Quantity, StringFormat=F3}" Width="80"/>
-                <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=F2}" Width="100"/>
-                <DataGridTextColumn Header="Скидка" Binding="{Binding DiscountSum, StringFormat=F2}" Width="100"/>
-                <DataGridTextColumn Header="Сумма" Binding="{Binding TotalSum, StringFormat=F2}" Width="120"/>
+                <DataGridTextColumn Header="№"           Binding="{Binding LineNumber}"              Width="50"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Product.Name}"           Width="*"/>
+                <DataGridTextColumn Header="Кол-во"      Binding="{Binding Quantity, StringFormat=F3}" Width="80"/>
+                <DataGridTextColumn Header="Цена"        Binding="{Binding Price, StringFormat=F2}"  Width="100"/>
+                <DataGridTextColumn Header="Скидка"      Binding="{Binding DiscountSum, StringFormat=F2}" Width="100"/>
+                <DataGridTextColumn Header="Сумма"       Binding="{Binding TotalSum, StringFormat=F2}"    Width="120"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -72,6 +74,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="BarcodeInput"
                              Grid.Column="0"
+                             Text="{Binding BarcodeInput, UpdateSourceTrigger=PropertyChanged}"
                              FontSize="20"
                              Padding="10"
                              Background="#2E2E3E"
@@ -79,16 +82,17 @@
                              CaretBrush="White"
                              BorderBrush="#555"
                              KeyDown="BarcodeInput_KeyDown"/>
-                    <Button Grid.Column="1" Content="Добавить"
+                    <Button Grid.Column="1"
+                            Content="Добавить"
+                            Command="{Binding ScanCommand}"
                             Margin="10,0,0,0"
                             FontSize="16"
                             Background="#4CAF50"
                             Foreground="White"
                             BorderThickness="0"
-                            Cursor="Hand"
-                            Click="AddButton_Click"/>
+                            Cursor="Hand"/>
                 </Grid>
-                <TextBlock x:Name="StatusText"
+                <TextBlock Text="{Binding StatusText}"
                            Foreground="#FF6B6B"
                            FontSize="14"
                            Margin="0,8,0,0"/>
@@ -101,12 +105,13 @@
                 <StackPanel>
                     <TextBlock Text="ИТОГО" Foreground="#AAA"
                                FontSize="14" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="TotalText" Text="0.00 BYN"
+                    <TextBlock Text="{Binding TotalText}"
                                Foreground="White" FontSize="32"
                                FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="DiscountText" Text=""
+                    <TextBlock Text="{Binding DiscountText}"
                                Foreground="#4CAF50" FontSize="14"
-                               HorizontalAlignment="Center"/>
+                               HorizontalAlignment="Center"
+                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVis}}"/>
                 </StackPanel>
             </Border>
         </Grid>
@@ -119,26 +124,30 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="УДАЛИТЬ ПОЗИЦИЮ"
+            <Button Grid.Column="0"
+                    Content="УДАЛИТЬ ПОЗИЦИЮ"
+                    Command="{Binding RemoveCommand}"
+                    CommandParameter="{Binding SelectedItem.LineNumber, ElementName=LinesGrid}"
                     Height="60" FontSize="16"
                     Background="#FF5722" Foreground="White"
                     BorderThickness="0" Margin="0,0,10,0"
-                    Cursor="Hand"
-                    Click="RemoveButton_Click"/>
+                    Cursor="Hand"/>
 
-            <Button Grid.Column="1" Content="ОТМЕНИТЬ ЧЕК"
+            <Button Grid.Column="1"
+                    Content="ОТМЕНИТЬ ЧЕК"
+                    Command="{Binding CancelCommand}"
                     Height="60" FontSize="16"
                     Background="#9E9E9E" Foreground="White"
                     BorderThickness="0" Margin="0,0,10,0"
-                    Cursor="Hand"
-                    Click="CancelButton_Click"/>
+                    Cursor="Hand"/>
 
-            <Button Grid.Column="2" Content="ОПЛАТИТЬ"
+            <Button Grid.Column="2"
+                    Content="ОПЛАТИТЬ"
+                    Command="{Binding PayCommand}"
                     Height="60" FontSize="18" FontWeight="Bold"
                     Background="#2196F3" Foreground="White"
                     BorderThickness="0"
-                    Cursor="Hand"
-                    Click="PayButton_Click"/>
+                    Cursor="Hand"/>
         </Grid>
     </Grid>
 </Window>

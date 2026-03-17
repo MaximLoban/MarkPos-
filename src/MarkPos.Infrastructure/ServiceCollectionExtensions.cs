@@ -1,6 +1,8 @@
 ﻿using MarkPos.Application;
 using MarkPos.Application.Interfaces;
+using MarkPos.Application.Sales;
 using MarkPos.Application.Scanner;
+using MarkPos.Application.Session;      // ← НОВЫЙ using
 using MarkPos.Application.UseCases;
 using MarkPos.Infrastructure.Discount;
 using MarkPos.Infrastructure.Persistence;
@@ -28,7 +30,7 @@ public static class ServiceCollectionExtensions
             _ => new ProductRepository(connectionString));
 
         services.AddSingleton<IDiscountCardRepository>(
-        _ => new DiscountCardRepository(discountDbConnection));
+            _ => new DiscountCardRepository(discountDbConnection));
         services.AddTransient<AttachDiscountCardUseCase>();
 
         // Discount HTTP client
@@ -59,6 +61,7 @@ public static class ServiceCollectionExtensions
 
         // Use Cases
         services.AddTransient<AddItemByBarcodeUseCase>();
+        services.AddTransient<RemoveItemUseCase>();          // ← НОВОЕ
         services.AddTransient<SearchProductsUseCase>();
         services.AddTransient<RequestDiscountsUseCase>();
         services.AddTransient<CloseReceiptUseCase>();
@@ -70,7 +73,10 @@ public static class ServiceCollectionExtensions
             parser: sp.GetRequiredService<ScannerParser>(),
             logger: sp.GetRequiredService<ILogger<TcpScannerListener>>()
         ));
-      
+        services.AddSingleton<IScannerService, TcpScannerService>(); // ← НОВОЕ
+
+        // Session facade
+        services.AddScoped<IPosSession, PosSession>();               // ← НОВОЕ
 
         return services;
     }

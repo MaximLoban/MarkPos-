@@ -726,7 +726,8 @@
       },
       "MarkPos.Application/1.0.0": {
         "dependencies": {
-          "MarkPos.Domain": "1.0.0"
+          "MarkPos.Domain": "1.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.3"
         },
         "runtime": {
           "MarkPos.Application.dll": {
