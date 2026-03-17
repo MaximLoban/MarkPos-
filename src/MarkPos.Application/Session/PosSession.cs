@@ -51,6 +51,14 @@ public sealed class PosSession : IPosSession
         await RequestDiscountsAsync();
     }
 
+    public async Task AdjustQuantityAsync(int lineNumber, decimal newQuantity)
+    {
+        var result = _receipt.SetQuantity(lineNumber, newQuantity);
+        if (!result.IsSuccess) { Publish(result.Error); return; }
+        Publish();
+        await RequestDiscountsAsync();
+    }
+
     public async Task RemoveItemAsync(int lineNumber)
     {
         _logger.LogInformation("RemoveItem: line={Line}", lineNumber);
@@ -73,7 +81,7 @@ public sealed class PosSession : IPosSession
         await RequestDiscountsAsync();
     }
 
-    public async Task<Result<TitanCheckResult>> PayAsync()   // ← TitanCheckResult
+    public async Task<Result<TitanCheckResult>> PayAsync()
     {
         _logger.LogInformation("Pay: total={Total}", _receipt.TotalSum);
 
@@ -134,8 +142,9 @@ public sealed class PosSession : IPosSession
             TotalSum: _receipt.TotalSum,
             DiscountSum: _receipt.DiscountSum,
             Status: _receipt.Status,
-            Message: message
+            Message: message,
+            DiscountCardNumber: _receipt.DiscountCard?.CardNumber
         );
         StateChanged?.Invoke(State);
     }
-}
+}  // ← закрывающая скобка класса

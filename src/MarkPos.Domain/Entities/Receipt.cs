@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MarkPos.Domain.ValueObjects;
+﻿using MarkPos.Domain.ValueObjects;
 
 namespace MarkPos.Domain.Entities;
 
 /// <summary>
 /// Агрегат чека. Вся бизнес-логика формирования чека здесь.
-/// Соответствует CreditGroup + Credit[] в БД.
 /// </summary>
 public class Receipt
 {
     private readonly List<ReceiptLine> _lines = new();
 
-    public int Id { get; }                  // TokenId для дисконтного модуля
+    public int Id { get; }
     public ReceiptStatus Status { get; private set; }
     public IReadOnlyList<ReceiptLine> Lines => _lines.AsReadOnly();
     public decimal TotalSum => _lines.Sum(l => l.TotalSum);
     public decimal DiscountSum => _lines.Sum(l => l.DiscountSum);
     public DateTime CreatedAt { get; }
-
-    // Заполняется после фискализации через TitanPOS
     public string? FiscalRegNumber { get; private set; }
     public int? FiscalDocNumber { get; private set; }
     public DateTime? ClosedAt { get; private set; }
+    public DiscountCard? DiscountCard { get; private set; }
 
     private Receipt(int id)
     {
@@ -72,6 +64,22 @@ public class Receipt
         return Result.Ok();
     }
 
+    public Result SetQuantity(int lineNumber, decimal quantity)   // ← теперь внутри класса
+    {
+        if (Status == ReceiptStatus.Closed)
+            return Result.Failure("Нельзя изменять закрытый чек");
+
+        if (quantity <= 0)
+            return Result.Failure("Количество должно быть больше нуля");
+
+        var line = _lines.FirstOrDefault(l => l.LineNumber == lineNumber);
+        if (line == null)
+            return Result.Failure($"Позиция {lineNumber} не найдена");
+
+        line.SetQuantity(quantity);
+        return Result.Ok();
+    }
+
     public Result ApplyDiscounts(IReadOnlyList<DiscountLineResult> discounts)
     {
         if (!_lines.Any())
@@ -99,7 +107,6 @@ public class Receipt
         Status = ReceiptStatus.Closed;
         return Result.Ok();
     }
-    public DiscountCard? DiscountCard { get; private set; }
 
     public Result AttachDiscountCard(DiscountCard card)
     {
@@ -107,14 +114,14 @@ public class Receipt
             return Result.Failure("Нельзя изменять закрытый чек");
 
         DiscountCard = card;
-        Status = ReceiptStatus.Draft; // Пересчитать скидки
+        Status = ReceiptStatus.Draft;
         return Result.Ok();
     }
 }
 
 public enum ReceiptStatus
 {
-    Draft,            // Формируется
-    DiscountsApplied, // Скидки применены
-    Closed            // Фискализирован
+    Draft,
+    DiscountsApplied,
+    Closed
 }

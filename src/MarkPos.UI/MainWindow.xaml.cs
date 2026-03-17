@@ -18,4 +18,7 @@ public partial class MainWindow : Window
         if (e.Key == Key.Enter && DataContext is MainViewModel vm)
             vm.ScanCommand.Execute(null);
     }
+
+    private void FocusBarcodeInput(object sender, RoutedEventArgs e)
+        => BarcodeInput.Focus();
 }

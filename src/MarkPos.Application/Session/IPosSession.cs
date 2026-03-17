@@ -17,6 +17,7 @@ public interface IPosSession
     Task ScanItemAsync(string barcode, decimal quantity = 1, CancellationToken ct = default);
     Task RemoveItemAsync(int lineNumber);
     Task AttachCardAsync(string cardNumber);
+    Task AdjustQuantityAsync(int lineNumber, decimal newQuantity);
     Task<Result<TitanCheckResult>> PayAsync();   // ← было ClosedReceiptDto
     void Cancel();
 }

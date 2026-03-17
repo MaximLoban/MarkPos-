@@ -25,6 +25,9 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
 
         ScanCommand = new AsyncRelayCommand(ScanAsync);
         RemoveCommand = new AsyncRelayCommand<int>(ln => _session.RemoveItemAsync(ln));
+        RemoveCurrentCommand = new AsyncRelayCommand(RemoveCurrentAsync);
+        IncreaseQtyCommand = new AsyncRelayCommand(IncreaseQtyAsync);
+        DecreaseQtyCommand = new AsyncRelayCommand(DecreaseQtyAsync);
         PayCommand = new AsyncRelayCommand(PayAsync);
         CancelCommand = new RelayCommand(ConfirmAndCancel);
     }
@@ -33,6 +36,9 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
 
     public ICommand ScanCommand { get; }
     public ICommand RemoveCommand { get; }
+    public ICommand RemoveCurrentCommand { get; }
+    public ICommand IncreaseQtyCommand { get; }
+    public ICommand DecreaseQtyCommand { get; }
     public ICommand PayCommand { get; }
     public ICommand CancelCommand { get; }
 
@@ -41,10 +47,32 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     private PosState _state = PosState.Empty;
 
     public IReadOnlyList<ReceiptLine> Lines => _state.Lines;
-    public string TotalText => $"{_state.TotalSum:F2} BYN";
-    public string DiscountText => $"Скидка: -{_state.DiscountSum:F2} BYN";
+    public string TotalText => $"{_state.TotalSum:F2}";
+    public string SumWithoutDiscountText => $"{(_state.TotalSum + _state.DiscountSum):F2}";
+    public string DiscountSumText => $"-{_state.DiscountSum:F2}";
     public bool HasDiscount => _state.HasDiscount;
+    public bool HasItems => _state.HasItems;
     public string StatusText => _state.Message ?? string.Empty;
+    public bool HasStatusMessage => !string.IsNullOrEmpty(_state.Message);
+
+    // Дисконтная карта
+    public bool HasDiscountCard => _state.DiscountCardNumber != null;
+    public string DiscountCardText =>
+        _state.DiscountCardNumber is null
+            ? string.Empty
+            : $"Дисконтная карта «Е-плюс» №••••••••{_state.DiscountCardNumber[^4..]}••• принята!";
+
+    // Текущий (последний добавленный) товар
+    public ReceiptLine? CurrentItem => _state.Lines.Count > 0 ? _state.Lines[^1] : null;
+    public bool HasCurrentItem => CurrentItem != null;
+    public string CurrentItemName => CurrentItem?.Product.Name ?? string.Empty;
+    public string CurrentItemPrice => CurrentItem != null ? $"{CurrentItem.PriceOld:F2}" : "0.00";
+    public string CurrentItemQty => CurrentItem != null ? $"{CurrentItem.Quantity:F0}" : "0";
+    public string CurrentItemTotal => CurrentItem != null ? $"{CurrentItem.TotalSum:F2}" : "0.00";
+    public string CurrentItemDiscount => CurrentItem is { DiscountSum: > 0 }
+                                                        ? $"Скидка: -{CurrentItem.DiscountSum:F2}"
+                                                        : string.Empty;
+    public bool HasCurrentItemDiscount => CurrentItem is { DiscountSum: > 0 };
 
     private string _barcodeInput = string.Empty;
     public string BarcodeInput
@@ -61,6 +89,29 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         if (string.IsNullOrEmpty(barcode)) return;
         BarcodeInput = string.Empty;
         await _session.ScanItemAsync(barcode);
+    }
+
+    private async Task RemoveCurrentAsync()
+    {
+        if (CurrentItem is null) return;
+        await _session.RemoveItemAsync(CurrentItem.LineNumber);
+    }
+
+    private async Task IncreaseQtyAsync()
+    {
+        if (CurrentItem is null) return;
+        var barcode = CurrentItem.Product.Barcode ?? CurrentItem.Product.Gtin;
+        if (string.IsNullOrEmpty(barcode)) return;
+        await _session.ScanItemAsync(barcode, 1);
+    }
+
+    private async Task DecreaseQtyAsync()
+    {
+        if (CurrentItem is null) return;
+        if (CurrentItem.Quantity <= 1)
+            await _session.RemoveItemAsync(CurrentItem.LineNumber);
+        else
+            await _session.AdjustQuantityAsync(CurrentItem.LineNumber, CurrentItem.Quantity - 1);
     }
 
     private async Task PayAsync()
@@ -86,9 +137,22 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         _state = state;
         OnPropertyChanged(nameof(Lines));
         OnPropertyChanged(nameof(TotalText));
-        OnPropertyChanged(nameof(DiscountText));
+        OnPropertyChanged(nameof(SumWithoutDiscountText));
+        OnPropertyChanged(nameof(DiscountSumText));
         OnPropertyChanged(nameof(HasDiscount));
+        OnPropertyChanged(nameof(HasItems));
         OnPropertyChanged(nameof(StatusText));
+        OnPropertyChanged(nameof(HasStatusMessage));
+        OnPropertyChanged(nameof(HasDiscountCard));
+        OnPropertyChanged(nameof(DiscountCardText));
+        OnPropertyChanged(nameof(CurrentItem));
+        OnPropertyChanged(nameof(HasCurrentItem));
+        OnPropertyChanged(nameof(CurrentItemName));
+        OnPropertyChanged(nameof(CurrentItemPrice));
+        OnPropertyChanged(nameof(CurrentItemQty));
+        OnPropertyChanged(nameof(CurrentItemTotal));
+        OnPropertyChanged(nameof(CurrentItemDiscount));
+        OnPropertyChanged(nameof(HasCurrentItemDiscount));
     }
 
     private void OnScannerMessage(ScannerMessage message)

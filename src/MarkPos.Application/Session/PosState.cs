@@ -12,7 +12,8 @@ public sealed record PosState(
     decimal TotalSum,
     decimal DiscountSum,
     ReceiptStatus Status,
-    string? Message
+    string? Message,
+    string? DiscountCardNumber   // ← НОВОЕ
 )
 {
     public static readonly PosState Empty = new(
@@ -20,7 +21,8 @@ public sealed record PosState(
         TotalSum: 0m,
         DiscountSum: 0m,
         Status: ReceiptStatus.Draft,
-        Message: null
+        Message: null,
+        DiscountCardNumber: null  // ← НОВОЕ
     );
 
     public bool HasItems => Lines.Count > 0;

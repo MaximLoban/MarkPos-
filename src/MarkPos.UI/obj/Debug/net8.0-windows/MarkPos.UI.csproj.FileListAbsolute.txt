@@ -97,3 +97,5 @@ D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\refint\MarkPos.UI.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\MarkPos.UI.pdb
 D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\MarkPos.UI.genruntimeconfig.cache
 D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\ref\MarkPos.UI.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\WelcomeWindow.baml
+D:\NewPos\MarkPos\src\MarkPos.UI\obj\Debug\net8.0-windows\WelcomeWindow.g.cs

@@ -3,157 +3,551 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MarkPos — Касса самообслуживания"
         WindowState="Maximized"
-        Background="#1E1E2E">
+        WindowStyle="None"
+        Background="#F5F5F5"
+        ResizeMode="NoResize">
 
     <Window.Resources>
-        <Style x:Key="ColumnHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#1a1a2e"/>
-            <Setter Property="Foreground" Value="#00d4ff"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#555"/>
-            <Setter Property="BorderThickness" Value="0,0,1,1"/>
-        </Style>
+        <SolidColorBrush x:Key="Green"   Color="#8DC640"/>
+        <SolidColorBrush x:Key="Navy"    Color="#1C2D4F"/>
+        <SolidColorBrush x:Key="Dark"    Color="#373C46"/>
+        <SolidColorBrush x:Key="Red"     Color="#E8382D"/>
+        <SolidColorBrush x:Key="White"   Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="Bg"      Color="#F5F5F5"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!-- Стиль кнопки правой панели -->
+        <Style x:Key="SidebarButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource Navy}"/>
+            <Setter Property="Foreground" Value="{StaticResource White}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#2A3D5A">
+                            <Grid Margin="24,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0"
+                                                  Content="{TemplateBinding Tag}"
+                                                  VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{TemplateBinding Content}"
+                                           FontFamily="Open Sans"
+                                           FontWeight="Bold"
+                                           FontSize="22"
+                                           Foreground="{StaticResource White}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="›"
+                                           FontSize="36" Foreground="{StaticResource Green}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <!-- Хедер -->
+            <RowDefinition Height="75"/>
+            <!-- Контент -->
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!-- Левая часть -->
+            <ColumnDefinition Width="*"/>
+            <!-- Правая панель -->
+            <ColumnDefinition Width="350"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Заголовок -->
-        <TextBlock Grid.Row="0" Text="КАССА САМООБСЛУЖИВАНИЯ"
-                   Foreground="White" FontSize="24" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- ХЕДЕР                                                     -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2"
+                Background="White"
+                BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+            <Grid>
+                <!-- Логотип Евроопт -->
+                <Image Source="https://www.figma.com/api/mcp/asset/c036df8c-3129-4186-addb-2398bda17ffb"
+                       Height="40" HorizontalAlignment="Left"
+                       VerticalAlignment="Center" Margin="24,0,0,0"
+                       Stretch="Uniform"/>
 
-        <!-- Список товаров -->
-        <DataGrid Grid.Row="1"
-                  x:Name="LinesGrid"
-                  ItemsSource="{Binding Lines}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Background="#2E2E3E"
-                  Foreground="White"
-                  RowBackground="#2E2E3E"
-                  AlternatingRowBackground="#3E3E4E"
-                  BorderBrush="#555"
-                  GridLinesVisibility="Horizontal"
-                  HeadersVisibility="Column"
-                  ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
-                  FontSize="16">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="№"           Binding="{Binding LineNumber}"              Width="50"/>
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Product.Name}"           Width="*"/>
-                <DataGridTextColumn Header="Кол-во"      Binding="{Binding Quantity, StringFormat=F3}" Width="80"/>
-                <DataGridTextColumn Header="Цена"        Binding="{Binding Price, StringFormat=F2}"  Width="100"/>
-                <DataGridTextColumn Header="Скидка"      Binding="{Binding DiscountSum, StringFormat=F2}" Width="100"/>
-                <DataGridTextColumn Header="Сумма"       Binding="{Binding TotalSum, StringFormat=F2}"    Width="120"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                <!-- Кнопка вызов администратора -->
+                <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Margin="0,0,24,0" Height="52" Padding="18,0"
+                        Background="{StaticResource Green}"
+                        BorderThickness="0" Cursor="Hand"
+                        Command="{Binding CancelCommand}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{StaticResource Green}"
+                                    CornerRadius="8" Padding="20,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse Width="36" Height="36"
+                                             Stroke="{StaticResource Dark}"
+                                             StrokeThickness="2"
+                                             Margin="0,0,12,0"/>
+                                    <TextBlock Text="ВЫЗОВ АДМИНИСТРАТОРА"
+                                               FontFamily="Open Sans"
+                                               FontWeight="Bold"
+                                               FontSize="22"
+                                               Foreground="{StaticResource Dark}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-        <!-- Поле сканирования и итог -->
-        <Grid Grid.Row="2" Margin="0,15,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
-            </Grid.ColumnDefinitions>
+                <!-- Поле для сканирования (скрытое, получает фокус) -->
+                <TextBox x:Name="BarcodeInput"
+                         Text="{Binding BarcodeInput, UpdateSourceTrigger=PropertyChanged}"
+                         KeyDown="BarcodeInput_KeyDown"
+                         Width="1" Height="1" Opacity="0"
+                         HorizontalAlignment="Left"/>
+            </Grid>
+        </Border>
 
-            <!-- Штрихкод -->
-            <StackPanel Grid.Column="0">
-                <TextBlock Text="Отсканируйте товар или введите штрихкод:"
-                           Foreground="#AAA" FontSize="14" Margin="0,0,0,5"/>
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- ЛЕВАЯ ЧАСТЬ — основной контент                            -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Grid.Column="0" Background="#F5F5F5">
+            <Grid.RowDefinitions>
+                <!-- Полоска дисконтной карты -->
+                <RowDefinition Height="Auto"/>
+                <!-- Карточка текущего товара -->
+                <RowDefinition Height="Auto"/>
+                <!-- Таблица корзины -->
+                <RowDefinition Height="*"/>
+                <!-- Итоги -->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Дисконтная карта -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="#E0E0E0" BorderThickness="0,0,0,1"
+                    Padding="16,10"
+                    Visibility="{Binding HasDiscountCard, Converter={StaticResource BoolToVis}}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="https://www.figma.com/api/mcp/asset/dbda2285-50c4-4fd6-b72c-d1cac56c7041"
+                           Width="60" Height="38" Stretch="Uniform" Margin="0,0,16,0"/>
+                    <TextBlock Text="{Binding DiscountCardText}"
+                               FontFamily="Open Sans" FontSize="20"
+                               Foreground="{StaticResource Dark}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Карточка текущего товара -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    Margin="0,0,0,8"
+                    Padding="16"
+                    Visibility="{Binding HasCurrentItem, Converter={StaticResource BoolToVis}}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Картинка товара (placeholder) -->
+                    <Border Grid.Column="0" Grid.RowSpan="2"
+                            Width="90" Height="90"
+                            CornerRadius="8"
+                            Background="#F0F0F0"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="🛒" FontSize="40"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Название товара -->
+                    <TextBlock Grid.Column="1" Grid.Row="0"
+                               Text="{Binding CurrentItemName}"
+                               FontFamily="Open Sans"
+                               FontSize="22"
+                               Foreground="{StaticResource Dark}"
+                               TextWrapping="Wrap"
+                               Margin="16,0,16,8"
+                               VerticalAlignment="Top"/>
+
+                    <!-- Кнопка УДАЛИТЬ -->
+                    <Button Grid.Column="2" Grid.Row="0"
+                            Command="{Binding RemoveCurrentCommand}"
+                            Background="{StaticResource Red}"
+                            BorderThickness="0"
+                            Width="130" Height="52"
+                            Cursor="Hand"
+                            VerticalAlignment="Top">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{StaticResource Red}" CornerRadius="6">
+                                    <TextBlock Text="УДАЛИТЬ&#10;ТОВАР"
+                                               FontFamily="Open Sans"
+                                               FontWeight="Bold"
+                                               FontSize="18"
+                                               Foreground="White"
+                                               TextAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Цена / Количество / Итого -->
+                    <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
+                          Margin="16,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Цена -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="ЦЕНА, BYN"
+                                       FontFamily="Open Sans" FontSize="13"
+                                       Foreground="#888" Margin="0,0,0,2"/>
+                            <TextBlock Text="{Binding CurrentItemPrice}"
+                                       FontFamily="Open Sans" FontWeight="Bold"
+                                       FontSize="34" Foreground="{StaticResource Dark}"/>
+                        </StackPanel>
+
+                        <!-- +/- количество -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                    VerticalAlignment="Bottom" Margin="16,0">
+                            <Button Command="{Binding DecreaseQtyCommand}"
+                                    Width="42" Height="42"
+                                    Background="{StaticResource Green}"
+                                    BorderThickness="0" Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{StaticResource Green}"
+                                                CornerRadius="21">
+                                            <TextBlock Text="−" FontSize="28" FontWeight="Bold"
+                                                       Foreground="White"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,-2,0,0"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Border Width="70" Height="42" Background="#F5F5F5"
+                                    BorderBrush="#DDD" BorderThickness="1"
+                                    Margin="8,0" CornerRadius="6">
+                                <TextBlock Text="{Binding CurrentItemQty}"
+                                           FontFamily="Open Sans" FontWeight="Bold"
+                                           FontSize="24" Foreground="{StaticResource Dark}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <Button Command="{Binding IncreaseQtyCommand}"
+                                    Width="42" Height="42"
+                                    Background="{StaticResource Green}"
+                                    BorderThickness="0" Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{StaticResource Green}"
+                                                CornerRadius="21">
+                                            <TextBlock Text="+" FontSize="28" FontWeight="Bold"
+                                                       Foreground="White"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,-2,0,0"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <StackPanel Margin="8,0,0,0" VerticalAlignment="Bottom">
+                                <TextBlock Text="КОЛИЧЕСТВО, ШТ"
+                                           FontFamily="Open Sans" FontSize="11"
+                                           Foreground="#888" Margin="0,0,0,2"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Итого -->
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                            <TextBlock Text="ВСЕГО, BYN"
+                                       FontFamily="Open Sans" FontSize="13"
+                                       Foreground="#888" Margin="0,0,0,2"
+                                       HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding CurrentItemTotal}"
+                                       FontFamily="Open Sans" FontWeight="Bold"
+                                       FontSize="34" Foreground="{StaticResource Dark}"
+                                       HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding CurrentItemDiscount}"
+                                       FontFamily="Open Sans" FontSize="13"
+                                       Foreground="{StaticResource Green}"
+                                       HorizontalAlignment="Right"
+                                       Visibility="{Binding HasCurrentItemDiscount,
+                                           Converter={StaticResource BoolToVis}}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Таблица корзины -->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок таблицы -->
+                <Grid Grid.Row="0" Background="{StaticResource Navy}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="В КОРЗИНЕ"
+                               Grid.ColumnSpan="2"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="15" Foreground="White"
+                               VerticalAlignment="Center" Margin="16,0,0,0"/>
+                    <TextBlock Grid.Column="2" Text="ЦЕНА"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="14" Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="КОЛ-ВО/ВЕС"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="13" Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="ВСЕГО"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="14" Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Строки корзины -->
+                <ListView Grid.Row="1"
+                          ItemsSource="{Binding Lines}"
+                          Background="White"
+                          BorderThickness="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Background="{TemplateBinding Background}">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#F8FFF0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MinHeight="52" Margin="0,4,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding LineNumber, StringFormat='{}{0:D2}.'}"
+                                           FontFamily="Open Sans" FontSize="15"
+                                           Foreground="#999"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Product.Name}"
+                                           FontFamily="Open Sans" FontSize="15"
+                                           Foreground="{StaticResource Dark}"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0"/>
+
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding PriceOld, StringFormat=F2}"
+                                           FontFamily="Open Sans" FontSize="16"
+                                           Foreground="{StaticResource Dark}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Column="3"
+                                           Text="{Binding Quantity, StringFormat=F1}"
+                                           FontFamily="Open Sans" FontSize="16"
+                                           Foreground="{StaticResource Dark}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <StackPanel Grid.Column="4"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding TotalSum, StringFormat=F2}"
+                                               FontFamily="Open Sans"
+                                               FontWeight="Bold" FontSize="16"
+                                               Foreground="{StaticResource Dark}"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock FontFamily="Open Sans" FontSize="12"
+                                               Foreground="{StaticResource Green}"
+                                               HorizontalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <Binding Path="DiscountSum"
+                                                     StringFormat="-{0:F2}"/>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!-- Итоги -->
+            <Border Grid.Row="3" Background="{StaticResource Navy}" Padding="20,14">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="BarcodeInput"
-                             Grid.Column="0"
-                             Text="{Binding BarcodeInput, UpdateSourceTrigger=PropertyChanged}"
-                             FontSize="20"
-                             Padding="10"
-                             Background="#2E2E3E"
-                             Foreground="White"
-                             CaretBrush="White"
-                             BorderBrush="#555"
-                             KeyDown="BarcodeInput_KeyDown"/>
-                    <Button Grid.Column="1"
-                            Content="Добавить"
-                            Command="{Binding ScanCommand}"
-                            Margin="10,0,0,0"
-                            FontSize="16"
-                            Background="#4CAF50"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"/>
-                </Grid>
-                <TextBox Text="{Binding StatusText, Mode=OneWay}"
-         Foreground="#FF6B6B"
-         FontSize="14"
-         Margin="0,8,0,0"
-         IsReadOnly="True"
-         IsTabStop="False"
-         Background="Transparent"
-         BorderThickness="0"
-         TextWrapping="Wrap"
-         Cursor="IBeam"/>
-            </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-            <!-- Итог -->
-            <Border Grid.Column="1" Background="#2E2E3E"
-                    BorderBrush="#555" BorderThickness="1"
-                    CornerRadius="8" Padding="20" Margin="20,0,0,0">
-                <StackPanel>
-                    <TextBlock Text="ИТОГО" Foreground="#AAA"
-                               FontSize="14" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding TotalText}"
-                               Foreground="White" FontSize="32"
-                               FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding DiscountText}"
-                               Foreground="#4CAF50" FontSize="14"
-                               HorizontalAlignment="Center"
+                    <!-- Сумма без скидки -->
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Text="СУММА БЕЗ УЧЁТА СКИДКИ:"
+                               FontFamily="Open Sans" FontSize="15"
+                               Foreground="#AABBCC"
                                Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVis}}"/>
-                </StackPanel>
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                               Text="{Binding SumWithoutDiscountText}"
+                               FontFamily="Open Sans" FontSize="15"
+                               Foreground="#AABBCC"
+                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVis}}"/>
+
+                    <!-- Скидка -->
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Text="ВАША СКИДКА ПО КАРТЕ «Е-ПЛЮС»:"
+                               FontFamily="Open Sans" FontSize="15"
+                               Foreground="{StaticResource Green}"
+                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVis}}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Text="{Binding DiscountSumText}"
+                               FontFamily="Open Sans" FontSize="15"
+                               Foreground="{StaticResource Green}"
+                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVis}}"/>
+
+                    <!-- Итого -->
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Text="ИТОГО К ОПЛАТЕ:"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="28" Foreground="White"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"
+                               Text="{Binding TotalText}"
+                               FontFamily="Open Sans" FontWeight="Bold"
+                               FontSize="40" Foreground="White"
+                               VerticalAlignment="Center"/>
+                </Grid>
             </Border>
         </Grid>
 
-        <!-- Кнопки действий -->
-        <Grid Grid.Row="3" Margin="0,15,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- ПРАВАЯ ПАНЕЛЬ                                             -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Grid.Column="1" Background="{StaticResource Navy}">
+            <Grid.RowDefinitions>
+                <!-- Весовая платформа -->
+                <RowDefinition Height="220"/>
+                <!-- Кнопки действий -->
+                <RowDefinition Height="*"/>
+                <!-- Кнопка ОПЛАТИТЬ -->
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
 
-            <Button Grid.Column="0"
-                    Content="УДАЛИТЬ ПОЗИЦИЮ"
-                    Command="{Binding RemoveCommand}"
-                    CommandParameter="{Binding SelectedItem.LineNumber, ElementName=LinesGrid}"
-                    Height="60" FontSize="16"
-                    Background="#FF5722" Foreground="White"
-                    BorderThickness="0" Margin="0,0,10,0"
-                    Cursor="Hand"/>
+            <!-- Весовая платформа -->
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <Image Source="https://www.figma.com/api/mcp/asset/b6f6465a-f99a-4f44-8271-1e45f3ebd3e5"
+                       Width="180" Height="130" Stretch="Uniform"
+                       Margin="0,0,0,12"/>
+                <TextBlock Text="ПОЛОЖИТЕ ТОВАР&#10;НА КОНТРОЛЬНУЮ ПЛАТФОРМУ"
+                           FontFamily="Open Sans" FontWeight="Bold"
+                           FontSize="18" Foreground="{StaticResource Green}"
+                           TextAlignment="Center" LineHeight="24"/>
+            </StackPanel>
 
-            <Button Grid.Column="1"
-                    Content="ОТМЕНИТЬ ЧЕК"
-                    Command="{Binding CancelCommand}"
-                    Height="60" FontSize="16"
-                    Background="#9E9E9E" Foreground="White"
-                    BorderThickness="0" Margin="0,0,10,0"
-                    Cursor="Hand"/>
+            <!-- Кнопки действий -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Stretch">
+                <Button Content="ИСКАТЬ В КАТАЛОГЕ"
+                        Style="{StaticResource SidebarButton}"
+                        IsEnabled="False"/>
+                <Button Content="ПОИСК ПО ШТРИХ-КОДУ"
+                        Style="{StaticResource SidebarButton}"
+                        Click="FocusBarcodeInput"/>
+                <Button Content="ДОБАВИТЬ ПАКЕТЫ"
+                        Style="{StaticResource SidebarButton}"
+                        IsEnabled="False"/>
+            </StackPanel>
 
-            <Button Grid.Column="2"
-                    Content="ОПЛАТИТЬ"
+            <!-- Кнопка ОПЛАТИТЬ -->
+            <Button Grid.Row="2"
                     Command="{Binding PayCommand}"
-                    Height="60" FontSize="18" FontWeight="Bold"
-                    Background="#2196F3" Foreground="White"
+                    Background="{StaticResource Green}"
                     BorderThickness="0"
-                    Cursor="Hand"/>
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{StaticResource Green}">
+                            <TextBlock Text="ОПЛАТИТЬ"
+                                       FontFamily="Open Sans"
+                                       FontWeight="Bold"
+                                       FontSize="42"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Grid>
 </Window>

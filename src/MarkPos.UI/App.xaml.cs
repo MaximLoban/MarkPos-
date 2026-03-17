@@ -119,8 +119,8 @@ public partial class App : System.Windows.Application
 
             await Task.Delay(500);
 
-            var mainWindow = Services.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var welcomeWindow = new WelcomeWindow();
+            welcomeWindow.Show();
         }
         catch (Exception ex)
         {

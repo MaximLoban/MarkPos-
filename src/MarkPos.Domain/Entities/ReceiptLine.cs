@@ -42,4 +42,9 @@ public class ReceiptLine
         DiscountSum = discountSum;
         SumAdd = sumAdd;
     }
+
+    internal void SetQuantity(decimal quantity)
+    {
+        Quantity = quantity;
+    }
 }
