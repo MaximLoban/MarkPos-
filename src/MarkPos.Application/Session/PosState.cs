@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarkPos.Domain.Entities;
+﻿using MarkPos.Domain.Entities;
 
 namespace MarkPos.Application.Session;
+
+public enum PosMessageType
+{
+    None,
+    Info,    // "Карта принята" — полоска под хедером
+    Warning, // "Скидки недоступны" — полоска под хедером
+    Error    // "Товар не найден" — полноэкранный оверлей
+}
 
 public sealed record PosState(
     IReadOnlyList<ReceiptLine> Lines,
@@ -13,7 +16,8 @@ public sealed record PosState(
     decimal DiscountSum,
     ReceiptStatus Status,
     string? Message,
-    string? DiscountCardNumber   // ← НОВОЕ
+    PosMessageType MessageType,
+    string? DiscountCardNumber
 )
 {
     public static readonly PosState Empty = new(
@@ -22,7 +26,8 @@ public sealed record PosState(
         DiscountSum: 0m,
         Status: ReceiptStatus.Draft,
         Message: null,
-        DiscountCardNumber: null  // ← НОВОЕ
+        MessageType: PosMessageType.None,
+        DiscountCardNumber: null
     );
 
     public bool HasItems => Lines.Count > 0;

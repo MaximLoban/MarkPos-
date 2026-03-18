@@ -15,29 +15,41 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> FindByBarcodeAsync(string barcode, CancellationToken ct = default)
     {
         const string sql = """
-            SELECT TOP 1
-                g.GoodsId,
-                g.GoodsGroupId,
-                g.GoodsName        AS Name,
-                g.Price,
-                g.DiscountGroupId,
-                g.GoodsMinQuantity,
-                g.Piece,
-                g.GoodsTypeForFiscal,
-                g.MarkingType,
-                g.Gtin,
-                b.Barcode,
-                b.Quantity         AS BarcodeQuantity
-            FROM dbo.Barcodes b
-            JOIN dbo.Goods g ON g.GoodsId = b.GoodsId
-            WHERE b.Barcode = @Barcode
-        """;
+        SELECT TOP 1
+            g.GoodsId,
+            g.GoodsGroupId,
+            g.GoodsName        AS Name,
+            g.Price,
+            g.DiscountGroupId,
+            g.GoodsMinQuantity,
+            g.Piece,
+            g.GoodsTypeForFiscal,
+            g.MarkingType,
+            g.Gtin,
+            b.Barcode,
+            b.Quantity         AS BarcodeQuantity
+        FROM dbo.Barcodes b
+        JOIN dbo.Goods g ON g.GoodsId = b.GoodsId
+        WHERE b.Barcode = @Barcode
+    """;
 
-        await using var conn = new SqlConnection(_connectionString);
-        var row = await conn.QueryFirstOrDefaultAsync<ProductRow>(
-            new CommandDefinition(sql, new { Barcode = barcode }, cancellationToken: ct));
+        try
+        {
+            await using var conn = new SqlConnection(_connectionString);
+            var row = await conn.QueryFirstOrDefaultAsync<ProductRow>(
+                new CommandDefinition(sql, new { Barcode = barcode }, cancellationToken: ct));
 
-        return row == null ? null : MapProduct(row);
+            File.AppendAllText(@"D:\NewPos\scanner.log",
+                $"{DateTime.Now:HH:mm:ss} FindByBarcode: barcode=[{barcode}] found={row != null}\r\n");
+
+            return row == null ? null : MapProduct(row);
+        }
+        catch (Exception ex)
+        {
+            File.AppendAllText(@"D:\NewPos\scanner.log",
+                $"{DateTime.Now:HH:mm:ss} FindByBarcode ERROR: {ex.Message}\r\n");
+            throw;
+        }
     }
 
     public async Task<IReadOnlyList<Product>> SearchAsync(

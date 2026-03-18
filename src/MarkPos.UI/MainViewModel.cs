@@ -14,6 +14,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
 {
     private readonly IPosSession _session;
     private readonly IScannerService _scanner;
+    private string _lastBarcode = string.Empty;
 
     public MainViewModel(IPosSession session, IScannerService scanner)
     {
@@ -30,6 +31,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         DecreaseQtyCommand = new AsyncRelayCommand(DecreaseQtyAsync);
         PayCommand = new AsyncRelayCommand(PayAsync);
         CancelCommand = new RelayCommand(ConfirmAndCancel);
+        ClearErrorCommand = new RelayCommand(ClearError);
     }
 
     // ── Commands ───────────────────────────────────────────────────────────────
@@ -41,6 +43,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public ICommand DecreaseQtyCommand { get; }
     public ICommand PayCommand { get; }
     public ICommand CancelCommand { get; }
+    public ICommand ClearErrorCommand { get; }
 
     // ── Bindable props ─────────────────────────────────────────────────────────
 
@@ -52,8 +55,17 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public string DiscountSumText => $"-{_state.DiscountSum:F2}";
     public bool HasDiscount => _state.HasDiscount;
     public bool HasItems => _state.HasItems;
-    public string StatusText => _state.Message ?? string.Empty;
-    public bool HasStatusMessage => !string.IsNullOrEmpty(_state.Message);
+
+    // Полноэкранная ошибка (Товар не найден и т.п.)
+    public bool HasError => _state.MessageType == PosMessageType.Error;
+    public string ErrorMessage => _state.Message ?? string.Empty;
+    public string ErrorBarcode => _lastBarcode;
+
+    // Инфо-полоска (карта принята, скидки недоступны и т.п.)
+    public bool HasInfoMessage => _state.MessageType == PosMessageType.Info
+                                                    || _state.MessageType == PosMessageType.Warning;
+    public string InfoMessage => _state.Message ?? string.Empty;
+    public bool IsInfoWarning => _state.MessageType == PosMessageType.Warning;
 
     // Дисконтная карта
     public bool HasDiscountCard => _state.DiscountCardNumber != null;
@@ -62,7 +74,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
             ? string.Empty
             : $"Дисконтная карта «Е-плюс» №••••••••{_state.DiscountCardNumber[^4..]}••• принята!";
 
-    // Текущий (последний добавленный) товар
+    // Текущий товар
     public ReceiptLine? CurrentItem => _state.Lines.Count > 0 ? _state.Lines[^1] : null;
     public bool HasCurrentItem => CurrentItem != null;
     public string CurrentItemName => CurrentItem?.Product.Name ?? string.Empty;
@@ -87,6 +99,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         var barcode = BarcodeInput.Trim();
         if (string.IsNullOrEmpty(barcode)) return;
+        _lastBarcode = barcode;
         BarcodeInput = string.Empty;
         await _session.ScanItemAsync(barcode);
     }
@@ -132,17 +145,34 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
             _session.Cancel();
     }
 
+    private void ClearError()
+    {
+        _lastBarcode = string.Empty;
+        _state = _state with { Message = null, MessageType = PosMessageType.None };
+        NotifyAll();
+        BarcodeInput = string.Empty;
+    }
+
     private void OnStateChanged(PosState state)
     {
         _state = state;
+        NotifyAll();
+    }
+
+    private void NotifyAll()
+    {
         OnPropertyChanged(nameof(Lines));
         OnPropertyChanged(nameof(TotalText));
         OnPropertyChanged(nameof(SumWithoutDiscountText));
         OnPropertyChanged(nameof(DiscountSumText));
         OnPropertyChanged(nameof(HasDiscount));
         OnPropertyChanged(nameof(HasItems));
-        OnPropertyChanged(nameof(StatusText));
-        OnPropertyChanged(nameof(HasStatusMessage));
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(ErrorBarcode));
+        OnPropertyChanged(nameof(HasInfoMessage));
+        OnPropertyChanged(nameof(InfoMessage));
+        OnPropertyChanged(nameof(IsInfoWarning));
         OnPropertyChanged(nameof(HasDiscountCard));
         OnPropertyChanged(nameof(DiscountCardText));
         OnPropertyChanged(nameof(CurrentItem));
@@ -162,21 +192,31 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
             switch (message)
             {
                 case BarcodeMessage m:
+                    _lastBarcode = m.Barcode;
                     await _session.ScanItemAsync(m.Barcode);
                     break;
                 case WeightBarcodeMessage m:
+                    _lastBarcode = m.Barcode;
                     await _session.ScanItemAsync(m.Barcode, m.Quantity);
                     break;
                 case DiscountCardMessage m:
                     await _session.AttachCardAsync(m.CardNumber);
                     break;
                 case AdvertisingQrMessage:
-                    _state = _state with { Message = "Данный QR содержит рекламу." };
-                    OnPropertyChanged(nameof(StatusText));
+                    _state = _state with
+                    {
+                        Message = "Данный QR содержит рекламу.",
+                        MessageType = PosMessageType.Info
+                    };
+                    NotifyAll();
                     break;
                 case InvalidBarcodeMessage m:
-                    _state = _state with { Message = m.Reason };
-                    OnPropertyChanged(nameof(StatusText));
+                    _state = _state with
+                    {
+                        Message = m.Reason,
+                        MessageType = PosMessageType.Warning
+                    };
+                    NotifyAll();
                     break;
             }
         });

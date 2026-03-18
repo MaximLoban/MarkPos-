@@ -1,6 +1,7 @@
 ﻿<Window x:Class="MarkPos.UI.WelcomeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:MarkPos.UI.Controls"
         Title="MarkPos"
         WindowState="Maximized"
         WindowStyle="None"
@@ -8,9 +9,9 @@
         ResizeMode="NoResize">
 
     <Window.Resources>
-        <SolidColorBrush x:Key="Green"  Color="#8DC640"/>
-        <SolidColorBrush x:Key="Dark"   Color="#373C46"/>
-        <SolidColorBrush x:Key="Navy"   Color="#1C2D4F"/>
+        <SolidColorBrush x:Key="Green" Color="#8DC640"/>
+        <SolidColorBrush x:Key="Dark"  Color="#373C46"/>
+        <SolidColorBrush x:Key="Navy"  Color="#1C2D4F"/>
     </Window.Resources>
 
     <Grid>
@@ -21,89 +22,52 @@
 
         <!-- ══════════ ЛЕВАЯ ЧАСТЬ ══════════ -->
         <Grid Grid.Column="0" Background="#F5F5F5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <!-- Логотип -->
+                <RowDefinition Height="Auto"/>
+                <!-- Заголовки -->
+                <RowDefinition Height="*"/>
+                <!-- Шаги -->
+            </Grid.RowDefinitions>
 
             <!-- Логотип -->
-            <Image Source="https://www.figma.com/api/mcp/asset/44bc7374-0ca1-4402-8900-da09bceb665b"
-                   Height="55" HorizontalAlignment="Left" VerticalAlignment="Top"
-                   Margin="109,26,0,0" Stretch="Uniform"/>
+            <Image Grid.Row="0"
+           Source="C:\MarketPosSale\data4\Image\MainLogin\logo.png"
+           Height="45"
+           HorizontalAlignment="Left"
+           VerticalAlignment="Center"
+           Margin="109,0,0,0"
+           Stretch="Uniform"/>
 
-            <StackPanel Margin="109,158,60,0" VerticalAlignment="Top">
-
+            <!-- Заголовки -->
+            <StackPanel Grid.Row="1" Margin="109,0,60,30">
                 <TextBlock Text="КАССА САМООБСЛУЖИВАНИЯ."
-                           FontFamily="Open Sans" FontWeight="Bold" FontSize="62"
-                           Foreground="{StaticResource Dark}" TextWrapping="Wrap"
-                           Margin="0,0,0,16"/>
-
+                   FontFamily="Open Sans" FontWeight="Bold"
+                   FontSize="64" Foreground="{StaticResource Dark}"
+                   TextWrapping="Wrap"/>
                 <TextBlock Text="Покупайте быстро и просто!"
-                           FontFamily="Open Sans" FontSize="50"
-                           Foreground="{StaticResource Dark}" TextWrapping="Wrap"
-                           Margin="0,0,0,50"/>
-
-                <!-- Шаги 1-2-3 -->
-                <ItemsControl>
-                    <ItemsControl.Items>
-                        <Grid Margin="0,0,0,24">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="155"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Width="155" Height="155">
-                                <Ellipse Fill="{StaticResource Green}"/>
-                                <TextBlock Text="1" FontFamily="Open Sans" FontWeight="Bold"
-                                           FontSize="95" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           Margin="0,10,0,0"/>
-                            </Grid>
-                            <TextBlock Grid.Column="1" Text="ПОСТАВЬТЕ КОРЗИНУ"
-                                       FontFamily="Open Sans" FontWeight="SemiBold" FontSize="46"
-                                       Foreground="{StaticResource Green}"
-                                       VerticalAlignment="Center" Margin="36,0,0,0"
-                                       TextWrapping="Wrap"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,24">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="155"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Width="155" Height="155">
-                                <Ellipse Fill="{StaticResource Green}"/>
-                                <TextBlock Text="2" FontFamily="Open Sans" FontWeight="Bold"
-                                           FontSize="95" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           Margin="0,10,0,0"/>
-                            </Grid>
-                            <TextBlock Grid.Column="1" Text="ОТСКАНИРУЙТЕ ШТРИХ-КОД ТОВАРА"
-                                       FontFamily="Open Sans" FontWeight="SemiBold" FontSize="46"
-                                       Foreground="{StaticResource Green}"
-                                       VerticalAlignment="Center" Margin="36,0,0,0"
-                                       TextWrapping="Wrap"/>
-                        </Grid>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="155"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Width="155" Height="155">
-                                <Ellipse Fill="{StaticResource Green}"/>
-                                <TextBlock Text="3" FontFamily="Open Sans" FontWeight="Bold"
-                                           FontSize="95" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           Margin="0,10,0,0"/>
-                            </Grid>
-                            <TextBlock Grid.Column="1" Text="ПОЛОЖИТЕ ТОВАР НА ВЕСОВУЮ ПЛАТФОРМУ"
-                                       FontFamily="Open Sans" FontWeight="SemiBold" FontSize="46"
-                                       Foreground="{StaticResource Green}"
-                                       VerticalAlignment="Center" Margin="36,0,0,0"
-                                       TextWrapping="Wrap"/>
-                        </Grid>
-                    </ItemsControl.Items>
-                </ItemsControl>
-
+                   FontFamily="Open Sans" FontSize="55"
+                   Foreground="{StaticResource Dark}"
+                   TextWrapping="Wrap"/>
             </StackPanel>
-        </Grid>
 
+            <!-- Шаги 1-2-3 через Logo2.png перекрашиваем в зелёный -->
+            <Viewbox Grid.Row="2"
+         Stretch="Uniform"
+         HorizontalAlignment="Left"
+         VerticalAlignment="Top"
+         Margin="109,20,60,40">
+                <Rectangle Width="960" Height="700"
+               Fill="{StaticResource Green}">
+                    <Rectangle.OpacityMask>
+                        <ImageBrush ImageSource="C:\MarketPosSale\data4\Image\MainLogin\Logo2.png"
+                        Stretch="Uniform"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Viewbox>
+
+        </Grid>
         <!-- ══════════ ПРАВАЯ ПАНЕЛЬ ══════════ -->
         <Grid Grid.Column="1" Background="White">
             <Grid.Effect>
@@ -117,89 +81,78 @@
             </Grid.RowDefinitions>
 
             <!-- Шапка: способы оплаты -->
-            <Grid Grid.Row="0" Background="{StaticResource Navy}">
+            <Border Grid.Row="0" Background="{StaticResource Navy}">
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="ДОСТУПНЫЕ СПОСОБЫ ОПЛАТЫ"
-                               FontFamily="Roboto" FontSize="20" Foreground="White"
-                               HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <StackPanel Width="110" Margin="8,0">
-                            <Image Source="https://www.figma.com/api/mcp/asset/f0e64c17-b6ac-4c5f-94b3-e154e72b63b6"
-                                   Height="55" Stretch="Uniform"/>
-                            <TextBlock Text="Банковская&#10;карта" FontFamily="Roboto" FontSize="17"
-                                       Foreground="{StaticResource Green}" TextAlignment="Center"
-                                       Margin="0,6,0,0"/>
-                        </StackPanel>
-                        <StackPanel Width="106" Margin="8,0">
-                            <Image Source="https://www.figma.com/api/mcp/asset/a62a2884-442f-4d23-bd6b-17bf91fb7bb0"
-                                   Height="55" Stretch="Uniform"/>
-                            <TextBlock Text="Мобильный&#10;телефон" FontFamily="Roboto" FontSize="17"
-                                       Foreground="{StaticResource Green}" TextAlignment="Center"
-                                       Margin="0,6,0,0"/>
-                        </StackPanel>
-                        <StackPanel Width="106" Margin="8,0">
-                            <Image Source="https://www.figma.com/api/mcp/asset/6dd57fa8-a4c4-49f7-9f63-bc93a447d9d3"
-                                   Height="55" Stretch="Uniform"/>
-                            <TextBlock Text="Наличные" FontFamily="Roboto" FontSize="17"
-                                       Foreground="{StaticResource Green}" TextAlignment="Center"
-                                       Margin="0,6,0,0"/>
-                        </StackPanel>
-                        <StackPanel Width="110" Margin="8,0">
-                            <Image Source="https://www.figma.com/api/mcp/asset/98116dc9-1683-4a54-848a-829a604cc192"
-                                   Height="55" Stretch="Uniform"/>
-                            <TextBlock Text="Приложение&#10;«Еплюс»" FontFamily="Roboto" FontSize="17"
-                                       Foreground="{StaticResource Green}" TextAlignment="Center"
-                                       Margin="0,6,0,0"/>
-                        </StackPanel>
-                    </StackPanel>
+                               FontFamily="Roboto" FontSize="20"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,16"/>
+                    <Image Source="C:\MarketPosSale\data4\Image\MainLogin\PayTypeIcons.png"
+                           Height="90" Stretch="Uniform"
+                           HorizontalAlignment="Center"/>
                 </StackPanel>
-            </Grid>
+            </Border>
 
-            <!-- Контент -->
-            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Контент: карта + QR -->
+            <StackPanel Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="20,0">
 
                 <TextBlock Text="ДЛЯ НАЧАЛА РАБОТЫ"
-                           FontFamily="Roboto" FontSize="38" FontWeight="Bold"
-                           Foreground="{StaticResource Dark}"
-                           HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                           FontFamily="Roboto" FontWeight="Bold"
+                           FontSize="40" Foreground="{StaticResource Dark}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
 
                 <TextBlock Text="отсканируйте карту «Еплюс»"
-                           FontFamily="Roboto" FontSize="30"
+                           FontFamily="Roboto" FontSize="32"
                            Foreground="{StaticResource Dark}"
-                           HorizontalAlignment="Center" Margin="0,0,0,14"/>
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,14"/>
 
-                <Image Source="https://www.figma.com/api/mcp/asset/dbda2285-50c4-4fd6-b72c-d1cac56c7041"
-                       Width="220" Height="140" HorizontalAlignment="Center"
-                       Stretch="Uniform" Margin="0,0,0,18"/>
+                <Image Source="C:\MarketPosSale\data4\Image\MainLogin\DiscountCard.png"
+                       Width="233" Height="150"
+                       HorizontalAlignment="Center"
+                       Stretch="Uniform"
+                       Margin="0,0,0,20"/>
 
                 <TextBlock Text="или QR-код из приложения «Еплюс»"
-                           FontFamily="Roboto" FontSize="30"
+                           FontFamily="Roboto" FontSize="32"
                            Foreground="{StaticResource Dark}"
-                           HorizontalAlignment="Center" TextAlignment="Center"
-                           Width="460" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Width="478" TextWrapping="Wrap"
+                           Margin="0,0,0,14"/>
 
-                <Image Source="https://www.figma.com/api/mcp/asset/e147b923-6a70-4345-8373-d43868988f30"
-                       Width="170" Height="170" HorizontalAlignment="Center"
-                       Stretch="Uniform" Margin="0,0,0,18"/>
+                <Image Source="C:\MarketPosSale\data4\Image\MainLogin\QRCode.png"
+                       Width="178" Height="178"
+                       HorizontalAlignment="Center"
+                       Stretch="Uniform"
+                       Margin="0,0,0,20"/>
 
                 <TextBlock Text="или нажмите на кнопку ниже"
-                           FontFamily="Roboto" FontSize="30"
+                           FontFamily="Roboto" FontSize="32"
                            Foreground="{StaticResource Dark}"
-                           HorizontalAlignment="Center" TextAlignment="Center"
-                           Width="460" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Width="478" TextWrapping="Wrap"/>
             </StackPanel>
 
             <!-- Кнопка НАЧАТЬ -->
-            <Button Grid.Row="2" x:Name="StartButton" Click="StartButton_Click"
-                    BorderThickness="0" Cursor="Hand">
+            <Button Grid.Row="2"
+        x:Name="StartButton"
+        Click="StartButton_Click"
+        BorderThickness="0" Cursor="Hand">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{StaticResource Green}">
-                            <TextBlock Text="НАЧАТЬ  →"
-                                       FontFamily="Open Sans" FontWeight="Bold" FontSize="62"
-                                       Foreground="White"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="НАЧАТЬ"
+                           FontFamily="Open Sans" FontWeight="Bold"
+                           FontSize="64" Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>

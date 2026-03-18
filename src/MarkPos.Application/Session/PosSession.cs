@@ -45,16 +45,12 @@ public sealed class PosSession : IPosSession
         _logger.LogInformation("ScanItem: {Barcode} qty={Qty}", barcode, quantity);
 
         var result = await _addItem.ExecuteAsync(_receipt, barcode, quantity, ct);
-        if (!result.IsSuccess) { Publish(result.Error); return; }
+        if (!result.IsSuccess)
+        {
+            Publish(result.Error, PosMessageType.Error);
+            return;
+        }
 
-        Publish();
-        await RequestDiscountsAsync();
-    }
-
-    public async Task AdjustQuantityAsync(int lineNumber, decimal newQuantity)
-    {
-        var result = _receipt.SetQuantity(lineNumber, newQuantity);
-        if (!result.IsSuccess) { Publish(result.Error); return; }
         Publish();
         await RequestDiscountsAsync();
     }
@@ -64,7 +60,24 @@ public sealed class PosSession : IPosSession
         _logger.LogInformation("RemoveItem: line={Line}", lineNumber);
 
         var result = _removeItem.Execute(_receipt, lineNumber);
-        if (!result.IsSuccess) { Publish(result.Error); return; }
+        if (!result.IsSuccess)
+        {
+            Publish(result.Error, PosMessageType.Warning);
+            return;
+        }
+
+        Publish();
+        await RequestDiscountsAsync();
+    }
+
+    public async Task AdjustQuantityAsync(int lineNumber, decimal newQuantity)
+    {
+        var result = _receipt.SetQuantity(lineNumber, newQuantity);
+        if (!result.IsSuccess)
+        {
+            Publish(result.Error, PosMessageType.Warning);
+            return;
+        }
 
         Publish();
         await RequestDiscountsAsync();
@@ -75,9 +88,13 @@ public sealed class PosSession : IPosSession
         _logger.LogInformation("AttachCard: {Card}", cardNumber);
 
         var result = await _attachCard.ExecuteAsync(_receipt, cardNumber);
-        if (!result.IsSuccess) { Publish(result.Error); return; }
+        if (!result.IsSuccess)
+        {
+            Publish(result.Error, PosMessageType.Warning);
+            return;
+        }
 
-        Publish($"Карта принята: {cardNumber}");
+        Publish($"Карта принята: {cardNumber}", PosMessageType.Info);
         await RequestDiscountsAsync();
     }
 
@@ -86,7 +103,10 @@ public sealed class PosSession : IPosSession
         _logger.LogInformation("Pay: total={Total}", _receipt.TotalSum);
 
         if (!_receipt.Lines.Any())
+        {
+            Publish("Нет товаров в чеке", PosMessageType.Warning);
             return Result<TitanCheckResult>.Failure("Нет товаров в чеке");
+        }
 
         var payments = new List<TitanPayment>
         {
@@ -94,7 +114,11 @@ public sealed class PosSession : IPosSession
         };
 
         var result = await _closeReceipt.ExecuteAsync(_receipt, payments);
-        if (!result.IsSuccess) { Publish(result.Error); return result; }
+        if (!result.IsSuccess)
+        {
+            Publish(result.Error, PosMessageType.Error);
+            return result;
+        }
 
         _logger.LogInformation("Receipt closed: doc={DocNumber}", result.Value!.DocNumber);
         _receipt = Receipt.New(1);
@@ -131,11 +155,11 @@ public sealed class PosSession : IPosSession
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Discount module error");
-            Publish($"Скидки недоступны: {ex.Message}");
+            Publish($"Скидки недоступны: {ex.Message}", PosMessageType.Warning);
         }
     }
 
-    private void Publish(string? message = null)
+    private void Publish(string? message = null, PosMessageType type = PosMessageType.None)
     {
         State = new PosState(
             Lines: _receipt.Lines,
@@ -143,8 +167,9 @@ public sealed class PosSession : IPosSession
             DiscountSum: _receipt.DiscountSum,
             Status: _receipt.Status,
             Message: message,
+            MessageType: type,
             DiscountCardNumber: _receipt.DiscountCard?.CardNumber
         );
         StateChanged?.Invoke(State);
     }
-}  // ← закрывающая скобка класса
+}

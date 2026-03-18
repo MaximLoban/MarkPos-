@@ -1,19 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
 
 namespace MarkPos.UI;
 
-public partial class WelcomeWindow : Window
+public partial class MainWindow : Window
 {
-    public WelcomeWindow()
+    public MainWindow(MainViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = viewModel;
+        Loaded += (_, _) => BarcodeInput.Focus();
+        Closed += (_, _) => viewModel.Dispose();
     }
 
-    private void StartButton_Click(object sender, RoutedEventArgs e)
+    private void BarcodeInput_KeyDown(object sender, KeyEventArgs e)
     {
-        var mainWindow = App.Services.GetRequiredService<MainWindow>();
-        mainWindow.Show();
-        Close();
+        if (e.Key == Key.Enter && DataContext is MainViewModel vm)
+            vm.ScanCommand.Execute(null);
     }
+
+    private void FocusBarcodeInput(object sender, RoutedEventArgs e)
+        => BarcodeInput.Focus();
 }
