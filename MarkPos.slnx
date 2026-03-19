@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/MarkPos.Api/MarkPos.Api.csproj" />
     <Project Path="src/MarkPos.Application/MarkPos.Application.csproj" />
     <Project Path="src/MarkPos.Domain/MarkPos.Domain.csproj" />
     <Project Path="src/MarkPos.Infrastructure/MarkPos.Infrastructure.csproj" />

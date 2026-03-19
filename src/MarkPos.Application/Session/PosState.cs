@@ -7,7 +7,8 @@ public enum PosMessageType
     None,
     Info,    // "Карта принята" — полоска под хедером
     Warning, // "Скидки недоступны" — полоска под хедером
-    Error    // "Товар не найден" — полноэкранный оверлей
+    Error,    // "Товар не найден" — полноэкранный оверлей
+    Success   // Успешно закрытый чек
 }
 
 public sealed record PosState(
@@ -17,7 +18,8 @@ public sealed record PosState(
     ReceiptStatus Status,
     string? Message,
     PosMessageType MessageType,
-    string? DiscountCardNumber
+    string? DiscountCardNumber,
+    string? ElCheckUrl    // ← НОВОЕ
 )
 {
     public static readonly PosState Empty = new(
@@ -27,7 +29,8 @@ public sealed record PosState(
         Status: ReceiptStatus.Draft,
         Message: null,
         MessageType: PosMessageType.None,
-        DiscountCardNumber: null
+        DiscountCardNumber: null,
+         ElCheckUrl: null    // ← НОВОЕ
     );
 
     public bool HasItems => Lines.Count > 0;

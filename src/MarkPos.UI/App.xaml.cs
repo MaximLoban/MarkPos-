@@ -59,7 +59,6 @@ public partial class App : System.Windows.Application
                 scannerPort: int.Parse(config["Scanner:Port"]!)
             );
 
-            services.AddSingleton<IReceiptRepository, ReceiptRepository>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<MainWindow>();
 
@@ -93,6 +92,7 @@ public partial class App : System.Windows.Application
             }
 
             // Открываем смену если она ещё не открыта
+            // Открываем/переоткрываем смену если нужно
             var infoResult = await titanPos.GetInfoAsync();
             if (!infoResult.IsSuccess)
             {
@@ -101,7 +101,32 @@ public partial class App : System.Windows.Application
                 return;
             }
 
-            if (!infoResult.Value!.ShiftOpened)
+            var info = infoResult.Value!;
+
+            // Смена открыта более 24 часов — закрываем и открываем новую
+            if (info.IsBlocked)
+            {
+                File.AppendAllText(@"D:\NewPos\scanner.log",
+                    $"{DateTime.Now:HH:mm:ss} Смена заблокирована (>24ч) — переоткрываем\r\n",
+                    new UTF8Encoding(false));
+
+                var closeShiftResult = await titanPos.CloseShiftAsync();
+                if (!closeShiftResult.IsSuccess)
+                {
+                    ShowError($"Не удалось закрыть смену: {closeShiftResult.Error}");
+                    Shutdown();
+                    return;
+                }
+
+                var openShiftResult = await titanPos.OpenShiftAsync();
+                if (!openShiftResult.IsSuccess)
+                {
+                    ShowError($"Не удалось открыть новую смену: {openShiftResult.Error}");
+                    Shutdown();
+                    return;
+                }
+            }
+            else if (!info.ShiftOpened)
             {
                 var shiftResult = await titanPos.OpenShiftAsync();
                 if (!shiftResult.IsSuccess)
@@ -134,8 +159,8 @@ public partial class App : System.Windows.Application
         var window = new Window
         {
             Title = "Ошибка",
-            Width = 800,
-            Height = 400,
+            Width = 900,
+            Height = 500,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 
@@ -143,12 +168,23 @@ public partial class App : System.Windows.Application
         {
             Text = message,
             IsReadOnly = true,
-            TextWrapping = TextWrapping.Wrap,
+            TextWrapping = TextWrapping.Wrap,          // ← перенос строк
+            AcceptsReturn = true,                      // ← поддержка многострочности
+            IsUndoEnabled = false,
             VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto,
-            Margin = new Thickness(10)
+            HorizontalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled,
+            FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+            FontSize = 13,
+            Margin = new Thickness(10),
+            Background = System.Windows.Media.Brushes.WhiteSmoke
         };
 
         window.Content = textBox;
+        window.Loaded += (_, _) =>
+        {
+            textBox.Focus();
+            textBox.SelectAll();
+        };
         window.ShowDialog();
     }
 }

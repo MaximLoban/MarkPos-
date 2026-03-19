@@ -12,4 +12,6 @@ public interface ITitanPosClient
     Task<Result<TitanCheckResult>> RegisterCheckAsync(TitanCheckRequest request, CancellationToken ct = default);
     Task<Result> CloseSessionAsync(CancellationToken ct = default);
     Task<Result<TitanPosInfo>> GetInfoAsync(CancellationToken ct = default);
+    Task<Result> RollbackAsync(int chequeNumber, CancellationToken ct = default);
+    Task<Result<TitanMoneyOrderResult>> MoneyOrderAsync(decimal totalSum, bool isDeposit, CancellationToken ct = default);
 }

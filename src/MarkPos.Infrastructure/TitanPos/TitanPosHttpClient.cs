@@ -34,7 +34,25 @@ public class TitanPosHttpClient : ITitanPosClient
         var response = await SendAsync<TitanBaseResponse>("init", new { }, ct);
         return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
     }
+    public async Task<Result<TitanMoneyOrderResult>> MoneyOrderAsync(
+    decimal totalSum, bool isDeposit, CancellationToken ct = default)
+    {
+        Log($"MoneyOrderAsync: sum=[{totalSum}] isDeposit=[{isDeposit}]");
+        var response = await SendAsync<TitanMoneyOrderResponse>("moneyOrder", new
+        {
+            TotalSum = totalSum,
+            IsDeposit = isDeposit
+        }, ct);
 
+        if (!response.IsSuccess)
+            return Result<TitanMoneyOrderResult>.Failure(response.Error!);
+
+        return Result<TitanMoneyOrderResult>.Ok(new TitanMoneyOrderResult(
+            Number: response.Value!.Number,
+            Position: response.Value.Position,
+            Uid: response.Value.UID
+        ));
+    }
     public async Task<Result> OpenSessionAsync(string pin, string cashierName, CancellationToken ct = default)
     {
         Log($"OpenSessionAsync: cashier=[{cashierName}]");
@@ -59,7 +77,15 @@ public class TitanPosHttpClient : ITitanPosClient
         var response = await SendAsync<TitanBaseResponse>("closeShift", new { }, ct);
         return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
     }
-
+    public async Task<Result> RollbackAsync(int chequeNumber, CancellationToken ct = default)
+    {
+        Log($"RollbackAsync: chequeNumber=[{chequeNumber}]");
+        var response = await SendAsync<TitanBaseResponse>("rollback", new
+        {
+            ChequeNumber = chequeNumber
+        }, ct);
+        return response.IsSuccess ? Result.Ok() : Result.Failure(response.Error!);
+    }
     public async Task<Result<TitanCheckResult>> RegisterCheckAsync(
         TitanCheckRequest request, CancellationToken ct = default)
     {
@@ -116,12 +142,17 @@ public class TitanPosHttpClient : ITitanPosClient
             return Result<TitanPosInfo>.Failure(response.Error!);
 
         var data = response.Value!;
+        // Берём сумму наличных по первой валюте (BYN)
+        var cashInAll = data.CashInAll?.Values.FirstOrDefault() ?? 0m;
+
         return Result<TitanPosInfo>.Ok(new TitanPosInfo(
             ShiftOpened: data.ShiftOpened,
             Serial: data.Serial,
             Version: data.Version,
             IsBlocked: data.IsBlocked,
-            BlockedText: data.BlockedText
+            BlockedText: data.BlockedText,
+            DocNumber: data.DocNumber,
+            CashInAll: cashInAll
         ));
     }
 
@@ -212,5 +243,13 @@ public class TitanPosHttpClient : ITitanPosClient
         public string Version { get; init; } = string.Empty;
         public bool IsBlocked { get; init; }
         public string? BlockedText { get; init; }
+        public int DocNumber { get; init; }  // ← НОВОЕ
+        public Dictionary<string, decimal>? CashInAll { get; init; } // ← НОВОЕ
+    }
+    private class TitanMoneyOrderResponse : TitanBaseResponse
+    {
+        public int Number { get; init; }
+        public string Position { get; init; } = string.Empty;
+        public string UID { get; init; } = string.Empty;
     }
 }

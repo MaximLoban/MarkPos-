@@ -8,12 +8,16 @@
     <ApplicationIcon>app_icon (1).ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+<PackageReference Include="LottieSharp" Version="2.4.3" />
 <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarkPos.Application\MarkPos.Application.csproj" />
     <ProjectReference Include="..\MarkPos.Infrastructure\MarkPos.Infrastructure.csproj" />
+	  <Content Include="Assets\payment_success.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
 	<ItemGroup>
 		<Content Include="appsettings.json">

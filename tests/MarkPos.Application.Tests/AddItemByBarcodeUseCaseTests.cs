@@ -17,6 +17,18 @@ public class AddItemByBarcodeUseCaseTests
         Piece = 1
     };
 
+    private static Mock<IReceiptRepository> MakeReceiptRepoMock()
+    {
+        var mock = new Mock<IReceiptRepository>();
+        mock.Setup(r => r.CreateGroupAsync(It.IsAny<Receipt>(), default))
+            .ReturnsAsync(1L);
+        mock.Setup(r => r.InsertLineAsync(It.IsAny<long>(), It.IsAny<ReceiptLine>(), default))
+            .Returns(Task.CompletedTask);
+        mock.Setup(r => r.UpdateLineAsync(It.IsAny<long>(), It.IsAny<ReceiptLine>(), default))
+            .Returns(Task.CompletedTask);
+        return mock;
+    }
+
     [Fact]
     public async Task Execute_ValidBarcode_AddsItemToReceipt()
     {
@@ -26,7 +38,7 @@ public class AddItemByBarcodeUseCaseTests
             .Setup(r => r.FindByBarcodeAsync("4810000000001", default))
             .ReturnsAsync(product);
 
-        var useCase = new AddItemByBarcodeUseCase(repoMock.Object);
+        var useCase = new AddItemByBarcodeUseCase(repoMock.Object, MakeReceiptRepoMock().Object);
         var receipt = Receipt.New(1);
 
         var result = await useCase.ExecuteAsync(receipt, "4810000000001");
@@ -44,7 +56,7 @@ public class AddItemByBarcodeUseCaseTests
             .Setup(r => r.FindByBarcodeAsync(It.IsAny<string>(), default))
             .ReturnsAsync((Product?)null);
 
-        var useCase = new AddItemByBarcodeUseCase(repoMock.Object);
+        var useCase = new AddItemByBarcodeUseCase(repoMock.Object, MakeReceiptRepoMock().Object);
         var receipt = Receipt.New(1);
 
         var result = await useCase.ExecuteAsync(receipt, "0000000000000");
@@ -57,7 +69,7 @@ public class AddItemByBarcodeUseCaseTests
     public async Task Execute_EmptyBarcode_Fails()
     {
         var repoMock = new Mock<IProductRepository>();
-        var useCase = new AddItemByBarcodeUseCase(repoMock.Object);
+        var useCase = new AddItemByBarcodeUseCase(repoMock.Object, MakeReceiptRepoMock().Object);
         var receipt = Receipt.New(1);
 
         var result = await useCase.ExecuteAsync(receipt, "");

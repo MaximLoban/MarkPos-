@@ -137,7 +137,11 @@ public sealed class PosSession : IPosSession
 
         _logger.LogInformation("Receipt closed: doc={DocNumber}", result.Value!.DocNumber);
         _receipt = NewReceipt();
-        Publish();
+        Publish(
+            message: "Оплата принята! Заберите ваш чек и покупки.",
+            type: PosMessageType.Success,
+            elCheckUrl: result.Value!.ElCheckUrl
+        );
         return result;
     }
 
@@ -174,7 +178,7 @@ public sealed class PosSession : IPosSession
         }
     }
 
-    private void Publish(string? message = null, PosMessageType type = PosMessageType.None)
+    private void Publish(string? message = null, PosMessageType type = PosMessageType.None, string? elCheckUrl = null)
     {
         State = new PosState(
             Lines: _receipt.Lines,
@@ -183,7 +187,8 @@ public sealed class PosSession : IPosSession
             Status: _receipt.Status,
             Message: message,
             MessageType: type,
-            DiscountCardNumber: _receipt.DiscountCard?.CardNumber
+            DiscountCardNumber: _receipt.DiscountCard?.CardNumber,
+            ElCheckUrl: elCheckUrl
         );
         StateChanged?.Invoke(State);
     }

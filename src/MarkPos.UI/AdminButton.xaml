@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MarkPos.UI.Controls.AdminButton"
+﻿<UserControl x:Class="MarkPos.UI.AdminButton"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Button BorderThickness="0" Cursor="Hand" Height="75" Width="550">

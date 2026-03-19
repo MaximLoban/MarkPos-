@@ -49,11 +49,15 @@ public class Receipt
         if (quantity <= 0)
             return Result.Failure("Количество должно быть больше нуля");
 
-        var existing = _lines.FirstOrDefault(l => l.Product.GoodsId == product.GoodsId);
-        if (existing != null)
-            existing.AddQuantity(quantity);
+        // Увеличиваем количество только если это последний добавленный товар
+        var lastLine = _lines.Count > 0 ? _lines[^1] : null;
+        if (lastLine != null && lastLine.Product.GoodsId == product.GoodsId)
+        {
+            lastLine.AddQuantity(quantity);
+        }
         else
         {
+            // Всегда добавляем новую строку — даже если товар уже есть в чеке
             var lineNumber = _lines.Count == 0 ? 1 : _lines.Max(l => l.LineNumber) + 1;
             _lines.Add(new ReceiptLine(lineNumber, product, quantity));
         }

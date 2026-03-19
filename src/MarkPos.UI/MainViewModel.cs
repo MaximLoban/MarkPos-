@@ -5,7 +5,6 @@ using MarkPos.Domain.Entities;
 using MarkPos.UI.Commands;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MarkPos.UI;
@@ -32,6 +31,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         PayCommand = new AsyncRelayCommand(PayAsync);
         CancelCommand = new RelayCommand(ConfirmAndCancel);
         ClearErrorCommand = new RelayCommand(ClearError);
+        ClearSuccessCommand = new RelayCommand(ClearSuccess);
     }
 
     // ── Commands ───────────────────────────────────────────────────────────────
@@ -44,6 +44,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public ICommand PayCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand ClearErrorCommand { get; }
+    public ICommand ClearSuccessCommand { get; }
 
     // ── Bindable props ─────────────────────────────────────────────────────────
 
@@ -56,14 +57,18 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public bool HasDiscount => _state.HasDiscount;
     public bool HasItems => _state.HasItems;
 
-    // Полноэкранная ошибка (Товар не найден и т.п.)
+    // Полноэкранная ошибка
     public bool HasError => _state.MessageType == PosMessageType.Error;
     public string ErrorMessage => _state.Message ?? string.Empty;
     public string ErrorBarcode => _lastBarcode;
 
-    // Инфо-полоска (карта принята, скидки недоступны и т.п.)
+    // Полноэкранный успех
+    public bool HasSuccess => _state.MessageType == PosMessageType.Success;
+    public string? ElCheckUrl => _state.ElCheckUrl;
+
+    // Инфо-полоска
     public bool HasInfoMessage => _state.MessageType == PosMessageType.Info
-                                                    || _state.MessageType == PosMessageType.Warning;
+                                                         || _state.MessageType == PosMessageType.Warning;
     public string InfoMessage => _state.Message ?? string.Empty;
     public bool IsInfoWarning => _state.MessageType == PosMessageType.Warning;
 
@@ -82,10 +87,20 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public string CurrentItemQty => CurrentItem != null ? $"{CurrentItem.Quantity:F0}" : "0";
     public string CurrentItemTotal => CurrentItem != null ? $"{CurrentItem.TotalSum:F2}" : "0.00";
     public string CurrentItemDiscount => CurrentItem is { DiscountSum: > 0 }
-                                                        ? $"Скидка: -{CurrentItem.DiscountSum:F2}"
-                                                        : string.Empty;
+                                                            ? $"Скидка: -{CurrentItem.DiscountSum:F2}"
+                                                            : string.Empty;
     public bool HasCurrentItemDiscount => CurrentItem is { DiscountSum: > 0 };
+    public string? CurrentItemImagePath => CurrentItem != null
+    ? GetImagePath(CurrentItem.Product.GoodsId)
+    : null;
 
+    private static string? GetImagePath(long goodsId)
+    {
+        var padded = goodsId.ToString("D8");          // 00936524
+        var last4 = padded[^4..];                     // 6524
+        var path = $@"D:\Image\GoodsImage\Goods\256\{last4}\{padded}\norm\{padded}.n_1.png";
+        return System.IO.File.Exists(path) ? path : null;
+    }
     private string _barcodeInput = string.Empty;
     public string BarcodeInput
     {
@@ -130,18 +145,30 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     private async Task PayAsync()
     {
         var result = await _session.PayAsync();
-        if (result.IsSuccess)
-            MessageBox.Show(
-                $"Чек #{result.Value!.DocNumber} закрыт успешно.",
-                "Оплата принята", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!result.IsSuccess) return;
+
+        // Открываем электронный чек если есть
+        if (!string.IsNullOrEmpty(result.Value!.ElCheckUrl))
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = result.Value.ElCheckUrl,
+                    UseShellExecute = true
+                });
+            }
+            catch { /* игнорируем */ }
+        }
     }
 
     private void ConfirmAndCancel()
     {
-        var ok = MessageBox.Show(
+        var ok = System.Windows.MessageBox.Show(
             "Отменить текущий чек?", "Подтверждение",
-            MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (ok == MessageBoxResult.Yes)
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Question);
+        if (ok == System.Windows.MessageBoxResult.Yes)
             _session.Cancel();
     }
 
@@ -149,6 +176,13 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         _lastBarcode = string.Empty;
         _state = _state with { Message = null, MessageType = PosMessageType.None };
+        NotifyAll();
+        BarcodeInput = string.Empty;
+    }
+
+    private void ClearSuccess()
+    {
+        _state = _state with { Message = null, MessageType = PosMessageType.None, ElCheckUrl = null };
         NotifyAll();
         BarcodeInput = string.Empty;
     }
@@ -170,6 +204,8 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
         OnPropertyChanged(nameof(ErrorBarcode));
+        OnPropertyChanged(nameof(HasSuccess));
+        OnPropertyChanged(nameof(ElCheckUrl));
         OnPropertyChanged(nameof(HasInfoMessage));
         OnPropertyChanged(nameof(InfoMessage));
         OnPropertyChanged(nameof(IsInfoWarning));
@@ -183,6 +219,20 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         OnPropertyChanged(nameof(CurrentItemTotal));
         OnPropertyChanged(nameof(CurrentItemDiscount));
         OnPropertyChanged(nameof(HasCurrentItemDiscount));
+        OnPropertyChanged(nameof(CurrentItemImagePath));
+
+        // Автозакрытие экрана успеха через 5 секунд
+        if (_state.MessageType == PosMessageType.Success)
+        {
+            Task.Delay(5000).ContinueWith(_ =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (_state.MessageType == PosMessageType.Success)
+                        ClearSuccess();
+                });
+            });
+        }
     }
 
     private void OnScannerMessage(ScannerMessage message)

@@ -50,5 +50,12 @@ public record TitanPosInfo(
     string Serial,
     string Version,
     bool IsBlocked,
-    string? BlockedText
+    string? BlockedText,
+    int DocNumber,    // ← НОВОЕ
+    decimal CashInAll    // ← НОВОЕ
+);
+public record TitanMoneyOrderResult(
+    int Number,
+    string Position,
+    string Uid
 );

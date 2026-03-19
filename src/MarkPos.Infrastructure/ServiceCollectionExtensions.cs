@@ -75,8 +75,13 @@ public static class ServiceCollectionExtensions
         ));
         services.AddSingleton<IScannerService, TcpScannerService>(); // ← НОВОЕ
 
+        var cs = connectionString;
+        services.AddSingleton<IReceiptRepository>(_ => new ReceiptRepository(cs));
+
         // Session facade
         services.AddScoped<IPosSession, PosSession>();               // ← НОВОЕ
+
+     
 
         return services;
     }

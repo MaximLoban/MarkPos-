@@ -1,4 +1,5 @@
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.UI.exe
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Assets\payment_success.json
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\appsettings.json
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.UI.deps.json
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.UI.runtimeconfig.json
@@ -7,6 +8,7 @@ D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.UI.pdb
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Azure.Core.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Azure.Identity.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Dapper.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\LottieSharp.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Bcl.AsyncInterfaces.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Data.SqlClient.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Caching.Abstractions.dll
@@ -48,6 +50,12 @@ D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.IdentityMode
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Tokens.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.SqlServer.Server.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\Microsoft.Xaml.Behaviors.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\SkiaSharp.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\SkiaSharp.SceneGraph.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\SkiaSharp.Skottie.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\SkiaSharp.Views.Desktop.Common.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\SkiaSharp.Views.WPF.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\System.ClientModel.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\System.Configuration.ConfigurationManager.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\System.Diagnostics.EventLog.dll
@@ -72,6 +80,10 @@ D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win\lib\net8.
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\osx\native\libSkiaSharp.dylib
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
+D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\NewPos\MarkPos\src\MarkPos.UI\bin\Debug\net8.0-windows\MarkPos.Application.dll
