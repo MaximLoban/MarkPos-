@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MarkPos.Domain.Entities;
+﻿using MarkPos.Domain.Entities;
 
 namespace MarkPos.Application.Interfaces;
 
 public interface IReceiptRepository
 {
-    /// <summary>Сохранить чек в локальную MSSQL (CreditGroup + Credit[]).</summary>
-    Task SaveAsync(Receipt receipt, CancellationToken ct = default);
+    /// <summary>INSERT CreditGroup, возвращает CreditGroupId</summary>
+    Task<long> CreateGroupAsync(Receipt receipt, CancellationToken ct = default);
 
-    /// <summary>Обновить фискальные данные после закрытия через TitanPOS.</summary>
-    Task UpdateFiscalInfoAsync(int receiptId, string fiscalRegNumber, int docNumber, CancellationToken ct = default);
+    /// <summary>INSERT одну строку Credit</summary>
+    Task InsertLineAsync(long creditGroupId, ReceiptLine line, CancellationToken ct = default);
+
+    /// <summary>UPDATE строки Credit после пересчёта скидок</summary>
+    Task UpdateLineAsync(long creditGroupId, ReceiptLine line, CancellationToken ct = default);
+
+    /// <summary>UPDATE CreditGroup.DiscountCardId после сканирования карты</summary>
+    Task UpdateDiscountCardAsync(long creditGroupId, long discountCardId, CancellationToken ct = default);
+
+    /// <summary>UPDATE CreditGroup после фискализации</summary>
+    Task UpdateFiscalInfoAsync(long creditGroupId, string fiscalRegNumber, int docNumber, CancellationToken ct = default);
 }

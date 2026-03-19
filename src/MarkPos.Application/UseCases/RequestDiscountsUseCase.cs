@@ -16,11 +16,13 @@ public class RequestDiscountsUseCase
 {
     private readonly IDiscountClient _discount;
     private readonly StationConfig _config;
+    private readonly IReceiptRepository _receipts;
 
-    public RequestDiscountsUseCase(IDiscountClient discount, StationConfig config)
+    public RequestDiscountsUseCase(IDiscountClient discount, StationConfig config, IReceiptRepository receipts)
     {
         _discount = discount;
         _config = config;
+        _receipts = receipts;
     }
 
     public async Task<Result> ExecuteAsync(Receipt receipt, CancellationToken ct = default)
@@ -57,7 +59,18 @@ public class RequestDiscountsUseCase
      })
      .ToList();
 
-        return receipt.ApplyDiscounts(discountResults);
+        var applyResult = receipt.ApplyDiscounts(discountResults);
+        if (!applyResult.IsSuccess)
+            return applyResult;
+
+        // UPDATE Credit с новыми ценами и скидками
+        if (receipt.CreditGroupId.HasValue)
+        {
+            foreach (var line in receipt.Lines)
+                await _receipts.UpdateLineAsync(receipt.CreditGroupId.Value, line, ct);
+        }
+
+        return applyResult;
     }
 
     private DiscountRequest BuildRequest(Receipt receipt)

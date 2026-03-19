@@ -19,7 +19,12 @@ public class Receipt
     public int? FiscalDocNumber { get; private set; }
     public DateTime? ClosedAt { get; private set; }
     public DiscountCard? DiscountCard { get; private set; }
+    public long? CreditGroupId { get; private set; }
+    public int StationNumber { get; private set; }
+    public int FiscalType { get; private set; }
+    public short RetailSaleTypeId { get; private set; }
 
+    public void SetCreditGroupId(long id) => CreditGroupId = id;
     private Receipt(int id)
     {
         Id = id;
@@ -28,6 +33,13 @@ public class Receipt
     }
 
     public static Receipt New(int id) => new(id);
+
+    public void Configure(int stationNumber, int fiscalType, short retailSaleTypeId)
+    {
+        StationNumber = stationNumber;
+        FiscalType = fiscalType;
+        RetailSaleTypeId = retailSaleTypeId;
+    }
 
     public Result AddItem(Product product, decimal quantity)
     {

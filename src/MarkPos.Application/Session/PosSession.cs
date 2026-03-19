@@ -15,27 +15,42 @@ public sealed class PosSession : IPosSession
     private readonly CloseReceiptUseCase _closeReceipt;
     private readonly AttachDiscountCardUseCase _attachCard;
     private readonly ILogger<PosSession> _logger;
+    private readonly StationConfig _config;
 
-    private Receipt _receipt = Receipt.New(1);
+    private Receipt _receipt;
     private CancellationTokenSource? _discountCts;
 
     public PosState State { get; private set; } = PosState.Empty;
     public event Action<PosState>? StateChanged;
 
     public PosSession(
-        AddItemByBarcodeUseCase addItem,
-        RemoveItemUseCase removeItem,
-        RequestDiscountsUseCase requestDiscounts,
-        CloseReceiptUseCase closeReceipt,
-        AttachDiscountCardUseCase attachCard,
-        ILogger<PosSession> logger)
+     AddItemByBarcodeUseCase addItem,
+     RemoveItemUseCase removeItem,
+     RequestDiscountsUseCase requestDiscounts,
+     CloseReceiptUseCase closeReceipt,
+     AttachDiscountCardUseCase attachCard,
+     StationConfig config,
+     ILogger<PosSession> logger)
     {
         _addItem = addItem;
         _removeItem = removeItem;
         _requestDiscounts = requestDiscounts;
         _closeReceipt = closeReceipt;
         _attachCard = attachCard;
+        _config = config;
         _logger = logger;
+
+        _receipt = NewReceipt();
+    }
+
+    private Receipt NewReceipt()
+    {
+        var receipt = Receipt.New(1);
+        receipt.Configure(
+            int.Parse(_config.StationNumber),
+            int.Parse(_config.FiscalType),
+            short.Parse(_config.StationSaleTypeId));
+        return receipt;
     }
 
     // ── Public API ─────────────────────────────────────────────────────────────
@@ -121,7 +136,7 @@ public sealed class PosSession : IPosSession
         }
 
         _logger.LogInformation("Receipt closed: doc={DocNumber}", result.Value!.DocNumber);
-        _receipt = Receipt.New(1);
+        _receipt = NewReceipt();
         Publish();
         return result;
     }
@@ -130,7 +145,7 @@ public sealed class PosSession : IPosSession
     {
         _logger.LogInformation("Receipt cancelled");
         _discountCts?.Cancel();
-        _receipt = Receipt.New(1);
+        _receipt = NewReceipt();
         Publish();
     }
 

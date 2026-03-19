@@ -9,6 +9,8 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Domain.Tes
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Domain.Tests.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\MarkPos.Domain.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.TestPlatform.CoreUtilities.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.TestPlatform.PlatformAbstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
@@ -100,5 +102,3 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\refint\MarkPos.Dom
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\MarkPos.Domain.Tests.genruntimeconfig.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net8.0\ref\MarkPos.Domain.Tests.dll
-D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll

@@ -66,7 +66,14 @@ public class CloseReceiptUseCase
         receipt.MarkAsClosed(fiscalData.Uid, fiscalData.DocNumber);
 
         // Сохраняем в локальную БД
-        await _receipts.SaveAsync(receipt, ct);
+        if (receipt.CreditGroupId.HasValue)
+        {
+            await _receipts.UpdateFiscalInfoAsync(
+                receipt.CreditGroupId.Value,
+                fiscalData.Uid,
+                fiscalData.DocNumber,
+                ct);
+        }
 
         return Result<TitanCheckResult>.Ok(fiscalData);
     }
