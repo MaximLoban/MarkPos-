@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarkPos.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+108cc67e1353dbfb75ca0a03fc357102adb192e0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e313780701a5436d01dedab9d4ce6d6654c4a38c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarkPos.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarkPos.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
