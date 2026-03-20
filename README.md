@@ -10,7 +10,7 @@
 ## Настройка
 1. `cp src/MarkPos.UI/appsettings.json.example src/MarkPos.UI/appsettings.json`
 2. Заполни строки подключения к БД и URL сервисов в `appsettings.json`
-3. Применить миграции: запустить SQL-скрипты из `/sql`
+
 
 ## Запуск кассы
 dotnet run --project src/MarkPos.UI
