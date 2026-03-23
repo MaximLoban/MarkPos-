@@ -5,6 +5,7 @@ D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.GeneratedM
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.AssemblyInfoInputs.cache
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.AssemblyInfo.cs
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.sourcelink.json
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.dll
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\refint\MarkPos.Domain.dll
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net10.0\MarkPos.Domain.pdb

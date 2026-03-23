@@ -9,3 +9,4 @@ D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net8.0\MarkPos.Domain.dll
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net8.0\refint\MarkPos.Domain.dll
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net8.0\MarkPos.Domain.pdb
 D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net8.0\ref\MarkPos.Domain.dll
+D:\NewPos\MarkPos\src\MarkPos.Domain\obj\Debug\net8.0\MarkPos.Domain.sourcelink.json

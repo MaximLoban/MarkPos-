@@ -9,6 +9,8 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Domain.Te
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Domain.Tests.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Domain.Tests.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.CoreUtilities.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.PlatformAbstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
@@ -85,13 +87,16 @@ D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\zh-Hans\Microsoft
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Application.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Domain.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Domain.pdb
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\bin\Debug\net10.0\MarkPos.Application.pdb
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.csproj.AssemblyReference.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.GeneratedMSBuildEditorConfig.editorconfig
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.AssemblyInfoInputs.cache
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.AssemblyInfo.cs
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.sourcelink.json
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos..CD60847E.Up2Date
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\MarkPos.Domain.Tests.dll
 D:\NewPos\MarkPos\tests\MarkPos.Domain.Tests\obj\Debug\net10.0\refint\MarkPos.Domain.Tests.dll

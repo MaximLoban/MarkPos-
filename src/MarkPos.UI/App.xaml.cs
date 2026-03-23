@@ -51,7 +51,8 @@ public partial class App : System.Windows.Application
                 {
                     ShopNumber = config["Station:ShopNumber"]!,
                     StationNumber = config["Station:StationNumber"]!,
-                    FiscalType = config["Station:FiscalType"]!,
+                    FiscalType = config["Station:FiscalType"] ?? "TitanPOS",
+                    FiscalEnabled = bool.Parse(config["Station:FiscalEnabled"] ?? "true"),
                     CashboxType = config["Station:CashboxType"]!,
                     StationSaleTypeId = config["Station:StationSaleTypeId"]!,
                     BaseId = config["Station:BaseId"]!

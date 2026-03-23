@@ -13,3 +13,4 @@ D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net8.0\MarkPos.Application.d
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net8.0\refint\MarkPos.Application.dll
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net8.0\MarkPos.Application.pdb
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net8.0\ref\MarkPos.Application.dll
+D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net8.0\MarkPos.Application.sourcelink.json

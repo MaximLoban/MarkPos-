@@ -8,6 +8,7 @@ D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.AssemblyInfoInputs.cache
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.AssemblyInfo.cs
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.sourcelink.json
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos..3ED95156.Up2Date
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\MarkPos.Application.dll
 D:\NewPos\MarkPos\src\MarkPos.Application\obj\Debug\net10.0\refint\MarkPos.Application.dll

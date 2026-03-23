@@ -8,7 +8,10 @@ D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Appl
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Application.Tests.runtimeconfig.json
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Application.Tests.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Application.Tests.pdb
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Castle.Core.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.CoreUtilities.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.PlatformAbstractions.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
@@ -16,7 +19,9 @@ D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.Te
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.CrossPlatEngine.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.TestPlatform.Utilities.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Microsoft.VisualStudio.TestPlatform.Common.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Moq.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\Newtonsoft.Json.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\System.Diagnostics.EventLog.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\xunit.assert.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\xunit.core.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\xunit.execution.dotnet.dll
@@ -85,6 +90,8 @@ D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\zh-Hans\Micr
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Application.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Domain.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\bin\Debug\net10.0\MarkPos.Application.pdb
@@ -94,6 +101,7 @@ D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Appl
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Application.Tests.AssemblyInfoInputs.cache
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Application.Tests.AssemblyInfo.cs
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Application.Tests.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Application.Tests.sourcelink.json
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos..BD81B5CE.Up2Date
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\MarkPos.Application.Tests.dll
 D:\NewPos\MarkPos\tests\MarkPos.Application.Tests\obj\Debug\net10.0\refint\MarkPos.Application.Tests.dll

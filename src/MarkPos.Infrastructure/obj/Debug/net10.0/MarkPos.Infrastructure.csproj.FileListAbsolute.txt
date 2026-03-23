@@ -10,6 +10,7 @@ D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastru
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.AssemblyInfoInputs.cache
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.AssemblyInfo.cs
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.csproj.CoreCompileInputs.cache
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.sourcelink.json
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos..FED89124.Up2Date
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\MarkPos.Infrastructure.dll
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net10.0\refint\MarkPos.Infrastructure.dll

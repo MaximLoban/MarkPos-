@@ -15,3 +15,4 @@ D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net8.0\MarkPos.Infrastruc
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net8.0\refint\MarkPos.Infrastructure.dll
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net8.0\MarkPos.Infrastructure.pdb
 D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net8.0\ref\MarkPos.Infrastructure.dll
+D:\NewPos\MarkPos\src\MarkPos.Infrastructure\obj\Debug\net8.0\MarkPos.Infrastructure.sourcelink.json

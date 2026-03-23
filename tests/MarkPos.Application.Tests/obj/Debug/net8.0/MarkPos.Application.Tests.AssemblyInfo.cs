@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarkPos.Application.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+108cc67e1353dbfb75ca0a03fc357102adb192e0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f9702c39b8b73140ae1f8c0c3aca41987149d44")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarkPos.Application.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarkPos.Application.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
