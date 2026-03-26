@@ -1,0 +1,57 @@
+﻿@page "/"
+@inject NavigationManager Nav
+
+<div class="welcome">
+
+    <!-- ══ ЛЕВАЯ ЧАСТЬ ══ -->
+    <div class="welcome__left">
+
+        <img class="welcome__logo"
+             src="images/logo.png"
+             alt="евроопт" />
+
+        <div class="welcome__text">
+            <h1 class="welcome__title">КАССА&nbsp;САМООБСЛУЖИВАНИЯ.</h1>
+            <p class="welcome__subtitle">Покупайте быстро и просто!</p>
+        </div>
+
+        <img class="welcome__steps"
+             src="images/Logo2.png"
+             alt="Шаги 1-2-3" />
+    </div>
+
+    <!-- ══ ПРАВАЯ ПАНЕЛЬ ══ -->
+    <div class="welcome__right">
+
+        <!-- Шапка: способы оплаты -->
+        <div class="welcome__payment-header">
+            <p class="welcome__payment-title">ДОСТУПНЫЕ СПОСОБЫ ОПЛАТЫ</p>
+            <img src="images/PayTypeIcons.png" alt="Способы оплаты" class="welcome__payment-icons" />
+        </div>
+
+        <!-- Контент -->
+        <div class="welcome__card-section">
+            <p class="welcome__card-heading">ДЛЯ НАЧАЛА РАБОТЫ</p>
+
+            <p class="welcome__card-text">отсканируйте карту «Еплюс»</p>
+            <img src="images/DiscountCard.png" alt="Карта Еплюс" class="welcome__card-img" />
+
+            <p class="welcome__card-text">или QR-код из приложения «Еплюс»</p>
+            <img src="images/QRCode.png" alt="QR-код" class="welcome__qr-img" />
+
+            <p class="welcome__card-text">или нажмите на кнопку ниже</p>
+        </div>
+
+        <!-- Кнопка НАЧАТЬ -->
+        <button class="welcome__start-btn" @onclick="StartShopping">
+            НАЧАТЬ
+        </button>
+    </div>
+</div>
+
+@code {
+    private void StartShopping()
+    {
+        Nav.NavigateTo("/main");
+    }
+}

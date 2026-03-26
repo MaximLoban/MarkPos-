@@ -23,7 +23,8 @@ public static class ServiceCollectionExtensions
         string titanInitialKey,
         string discountDbConnection,
         StationConfig stationConfig,
-        int scannerPort)
+        int scannerPort,
+        bool fiscalEnabled = true)
     {
         // Persistence
         services.AddSingleton<IProductRepository>(
@@ -44,17 +45,24 @@ public static class ServiceCollectionExtensions
         });
 
         // TitanPOS HTTP client
-        services.AddSingleton<ITitanPosClient>(sp =>
+        if (fiscalEnabled)
         {
-            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("TitanPos");
-            return new TitanPosHttpClient(httpClient, titanInitialKey);
-        });
-        services.AddHttpClient("TitanPos", client =>
+            services.AddSingleton<ITitanPosClient>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                    .CreateClient("TitanPos");
+                return new TitanPosHttpClient(httpClient, titanInitialKey);
+            });
+            services.AddHttpClient("TitanPos", client =>
+            {
+                client.BaseAddress = new Uri(titanPosUrl);
+                client.Timeout = TimeSpan.FromSeconds(10);
+            });
+        }
+        else
         {
-            client.BaseAddress = new Uri(titanPosUrl);
-            client.Timeout = TimeSpan.FromSeconds(10);
-        });
+            services.AddSingleton<ITitanPosClient, NullFiscalClient>();
+        }
 
         // Station config
         services.AddSingleton(stationConfig);
@@ -77,11 +85,12 @@ public static class ServiceCollectionExtensions
 
         var cs = connectionString;
         services.AddSingleton<IReceiptRepository>(_ => new ReceiptRepository(cs));
+        services.AddSingleton<ICatalogRepository>(_ => new CatalogRepository(cs));
 
         // Session facade
-        services.AddScoped<IPosSession, PosSession>();               // ← НОВОЕ
+        services.AddSingleton<IPosSession, PosSession>();
 
-     
+
 
         return services;
     }

@@ -1,8 +1,12 @@
+using MarkPos.Api;
 using MarkPos.Application;
 using MarkPos.Application.DTOs;
 using MarkPos.Application.Interfaces;
+using MarkPos.Application.Scanner;
 using MarkPos.Application.Session;
 using MarkPos.Infrastructure;
+using MarkPos.Infrastructure.Scanner;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi;
 
 
@@ -31,12 +35,39 @@ builder.Services.AddMarkPosInfrastructure(
         StationSaleTypeId = config["Station:StationSaleTypeId"]!,
         BaseId = config["Station:BaseId"]!
     },
-    scannerPort: int.Parse(config["Scanner:Port"]!)
+    scannerPort: int.Parse(config["Scanner:Port"]!),
+    fiscalEnabled: config.GetValue<bool>("Station:FiscalEnabled")
 );
 
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("http://localhost:5078")
+     .AllowAnyMethod()
+     .AllowAnyHeader()
+     .AllowCredentials()));
+
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<PosStateNotifier>();
+builder.Services.AddHostedService<ScannerStartupService>();
+
+// ДОБАВИТЬ
+builder.Services.AddSingleton<IPosSession, PosSession>();
+builder.Services.AddSingleton<ScannerParser>();
+
+// ЗАМЕНИ регистрацию TcpScannerListener на такую:
+builder.Services.AddSingleton<TcpScannerListener>(sp =>
+{
+    var parser = sp.GetRequiredService<ScannerParser>();
+    var logger = sp.GetRequiredService<ILogger<TcpScannerListener>>();
+
+    var port = int.Parse(builder.Configuration["Scanner:Port"]!);
+
+    return new TcpScannerListener(port, parser, logger);
+});
+builder.Services.AddHostedService(sp => sp.GetRequiredService<TcpScannerListener>());
 var app = builder.Build();
 
 // ── Swagger UI ────────────────────────────────────────────────────────────────
+app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -121,6 +152,36 @@ app.MapPost("/session/cancel", (IPosSession session) =>
 .WithSummary("Отменить текущий чек")
 .WithTags("Session");
 
+// ── Catalog endpoints ─────────────────────────────────────────────────────────
+
+// GET /catalog/groups — родительские группы
+app.MapGet("/catalog/groups", async (ICatalogRepository catalog) =>
+    Results.Ok(await catalog.GetParentGroupsAsync()))
+    .WithName("GetParentGroups")
+    .WithSummary("Родительские группы каталога")
+    .WithTags("Catalog");
+
+// GET /catalog/groups/{groupId}/children — дочерние группы
+app.MapGet("/catalog/groups/{groupId:long}/children", async (long groupId, ICatalogRepository catalog) =>
+    Results.Ok(await catalog.GetChildGroupsAsync(groupId)))
+    .WithName("GetChildGroups")
+    .WithSummary("Дочерние группы")
+    .WithTags("Catalog");
+
+// GET /catalog/groups/{groupId}/has-children
+app.MapGet("/catalog/groups/{groupId:long}/has-children", async (long groupId, ICatalogRepository catalog) =>
+    Results.Ok(await catalog.HasChildrenAsync(groupId)))
+    .WithName("HasChildGroups")
+    .WithSummary("Есть ли дочерние группы")
+    .WithTags("Catalog");
+
+// GET /catalog/groups/{groupId}/items — товары группы
+app.MapGet("/catalog/groups/{groupId:long}/items", async (long groupId, ICatalogRepository catalog) =>
+    Results.Ok(await catalog.GetGroupItemsAsync(groupId)))
+    .WithName("GetGroupItems")
+    .WithSummary("Товары группы")
+    .WithTags("Catalog");
+
 // ── TitanPOS endpoints ────────────────────────────────────────────────────────
 
 // GET /titanpos/info — статус кассы
@@ -159,6 +220,25 @@ app.MapPost("/titanpos/shift/close", async (ITitanPosClient titan) =>
 .WithSummary("Закрыть кассовую смену (Z-отчёт)")
 .WithTags("TitanPOS");
 
+// GET /products/{goodsId}/image — локальное фото товара
+app.MapGet("/products/{goodsId:long}/image", (long goodsId) =>
+{
+    var padded = goodsId.ToString("D8");
+    var last4  = padded[^4..];
+    var path   = $@"D:\Image\GoodsImage\Goods\256\{last4}\{padded}\norm\{padded}.n_1.png";
+    return File.Exists(path)
+        ? Results.File(path, "image/png")
+        : Results.NotFound();
+})
+.WithName("GetProductImage")
+.WithSummary("Фото товара по GoodsId")
+.WithTags("Products");
+
+app.MapHub<PosHub>("/hubs/pos");
+app.MapGet("/test-signalr", async (IHubContext<PosHub> hub) =>
+{
+    await hub.Clients.All.SendAsync("StateChanged", new { test = "ok" });
+});
 app.Run();
 
 // ── Request DTOs ──────────────────────────────────────────────────────────────

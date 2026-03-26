@@ -1,0 +1,146 @@
+﻿.welcome {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: var(--light-bg);
+}
+
+/* ══ ЛЕВАЯ ЧАСТЬ ══ */
+.welcome__left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 60px 40px 109px;
+    background: var(--light-bg);
+    overflow: hidden;
+}
+
+.welcome__logo {
+    height: 45px;
+    object-fit: contain;
+    align-self: flex-start;
+    margin-bottom: 30px;
+}
+
+.welcome__text {
+    margin-bottom: 30px;
+}
+
+.welcome__title {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--graphite);
+    line-height: 1.1;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.welcome__subtitle {
+    font-size: 55px;
+    font-weight: 400;
+    color: var(--graphite);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.welcome__steps {
+    flex: 1;
+    object-fit: contain;
+    object-position: left top;
+    max-height: 100%;
+    /* Перекрашиваем белую картинку в зелёный */
+    filter: invert(62%) sepia(60%) saturate(500%) hue-rotate(50deg) brightness(95%);
+}
+
+/* ══ ПРАВАЯ ПАНЕЛЬ ══ */
+.welcome__right {
+    width: 586px;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    box-shadow: -10px 0 50px rgba(28, 45, 79, 0.25);
+}
+
+.welcome__payment-header {
+    height: 206px;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+}
+
+.welcome__payment-title {
+    color: white;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+.welcome__payment-icons {
+    height: 90px;
+    object-fit: contain;
+}
+
+.welcome__card-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 14px;
+}
+
+.welcome__card-heading {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--graphite);
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.welcome__card-text {
+    font-size: 32px;
+    color: var(--graphite);
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    max-width: 478px;
+}
+
+.welcome__card-img {
+    width: 233px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.welcome__qr-img {
+    width: 178px;
+    height: 178px;
+    object-fit: contain;
+}
+
+.welcome__start-btn {
+    height: 180px;
+    background: var(--green);
+    border: none;
+    color: white;
+    font-size: 64px;
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    transition: filter 0.15s;
+    letter-spacing: 2px;
+}
+
+    .welcome__start-btn:hover {
+        filter: brightness(1.08);
+    }
+
+    .welcome__start-btn:active {
+        filter: brightness(0.95);
+    }
+
+
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarkPos — Касса самообслуживания</title>
+    <base href="/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="MarkPos.BlazorUI.styles.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="loading-screen">
+            <div class="loading-logo">евроопт</div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+    <div id="blazor-error-ui">
+        Произошла ошибка.
+        <a href="." class="reload">Перезагрузить</a>
+        <span class="dismiss">✕</span>
+    </div>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        window.speakRu = function (text) {
+            window.speechSynthesis.cancel();
+            var utt = new SpeechSynthesisUtterance(text);
+            utt.lang = 'ru-RU';
+            utt.rate = 0.95;
+            utt.pitch = 1;
+            window.speechSynthesis.speak(utt);
+        };
+
+        window.playBeep = function () {
+            var ctx = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.4, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.3);
+        };
+    </script>
+</body>
+</html>

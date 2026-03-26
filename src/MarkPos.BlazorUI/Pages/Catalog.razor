@@ -1,0 +1,289 @@
+@page "/catalog"
+@inject PosApiClient Api
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+<div class="catalog-screen">
+
+    <!-- ХЕДЕР -->
+    <header class="main-header">
+        <img src="images/logo.png" alt="евроопт" class="header-logo" />
+        <button class="admin-btn" @onclick="CallAdmin">
+            <img src="images/Admin.png" alt="" />
+            <span>ВЫЗОВ АДМИНИСТРАТОРА</span>
+        </button>
+    </header>
+
+    <!-- АЛФАВИТНЫЙ ФИЛЬТР -->
+    <div class="alphabet-bar">
+        <button class="alphabet-btn @(_letterFilter == "ВСЕ" ? "alphabet-btn--active" : "")"
+                @onclick='() => SetLetterFilter("ВСЕ")'>ВСЕ</button>
+        @foreach (var key in LetterGroups.Keys)
+        {
+            var k = key;
+            <button class="alphabet-btn @(_letterFilter == k ? "alphabet-btn--active" : "")"
+                    @onclick="() => SetLetterFilter(k)">@k</button>
+        }
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="catalog-content">
+
+        <!-- Левая кнопка НАЗАД -->
+        <button class="catalog-nav-btn" @onclick='() => Nav.NavigateTo("/main")'>
+            <img src="images/ButtonArrow.png" class="catalog-nav-btn__arrow catalog-nav-btn__arrow--back" alt="" />
+            <span>НАЗАД</span>
+        </button>
+
+        <!-- Центр: заголовок + сетка + пагинация -->
+        <div class="catalog-center">
+            <div class="catalog-title">ПОИСК В КАТАЛОГЕ</div>
+
+            <div class="catalog-grid">
+                @foreach (var group in PagedGroups)
+                {
+                    var g = group;
+                    <div class="group-tile" @onclick="() => SelectGroup(g)">
+                        <div class="group-tile__icon">
+                            <img src="@g.ImageUrl" alt="@g.Name"
+                                 onerror="this.style.display='none'" />
+                        </div>
+                        <span class="group-tile__name">@g.Name</span>
+                    </div>
+                }
+                @for (int i = PagedGroups.Count; i < PageSize; i++)
+                {
+                    <div class="group-tile group-tile--empty"></div>
+                }
+            </div>
+
+            <div class="catalog-pagination">
+                <button class="catalog-pagination__btn" @onclick="PrevPage" disabled="@(_page == 0)">
+                    <img src="images/ButtonArrow.png" class="catalog-nav-btn__arrow catalog-nav-btn__arrow--back" alt="&lt;" />
+                </button>
+                <span class="catalog-pagination__label">@(_page + 1) из @TotalPages</span>
+                <button class="catalog-pagination__btn" @onclick="NextPage" disabled="@(_page >= TotalPages - 1)">
+                    <img src="images/ButtonArrow.png" class="catalog-nav-btn__arrow" alt="&gt;" />
+                </button>
+            </div>
+        </div>
+
+        <!-- Правая кнопка КОРЗИНА -->
+        <button class="catalog-nav-btn catalog-nav-btn--right" @onclick='() => Nav.NavigateTo("/main")'>
+            <img src="images/GoodsSearch.png" alt="" class="catalog-nav-btn__icon" />
+            <span>ВЕРНУТЬСЯ<br />В КОРЗИНУ</span>
+        </button>
+    </div>
+
+    <!-- СТРОКА ПОИСКА -->
+    <div class="catalog-search-bar">
+        <input class="catalog-search-input" type="text" readonly
+               value="@_searchText" placeholder="Введите название товара..." />
+        <button class="catalog-clear-btn" @onclick="ClearSearch">
+            <span style="color:var(--red); font-weight:700; margin-right:6px;">&#10005;</span> Очистить строку
+        </button>
+    </div>
+
+    <!-- ВИРТУАЛЬНАЯ КЛАВИАТУРА -->
+    <div class="catalog-keyboard">
+        @if (!_engLayout)
+        {
+            <div class="kb-row">
+                @foreach (var k in new[]{"Й","Ц","У","К","Е","Н","Г","Ш","Щ","З","Х","Ъ"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("1")'>1</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("2")'>2</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("3")'>3</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                @foreach (var k in new[]{"Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("4")'>4</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("5")'>5</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("6")'>6</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                @foreach (var k in new[]{"Я","Ч","С","М","И","Т","Ь","Б","Ю","Ё"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("7")'>7</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("8")'>8</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("9")'>9</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                <button class="kb-key kb-key--action kb-key--eng" @onclick="ToggleLang">ENG</button>
+                <button class="kb-key kb-key--wide" @onclick='() => TypeKey("ПРОБЕЛ")'>ПРОБЕЛ</button>
+                <button class="kb-key kb-key--action" @onclick='() => TypeKey(".")'>.</button>
+                <button class="kb-key kb-key--num" @onclick='() => TypeKey("0")'>0</button>
+                <button class="kb-key kb-key--action kb-key--backspace" @onclick='() => TypeKey("⌫")'>&#9003;</button>
+            </div>
+        }
+        else
+        {
+            <div class="kb-row">
+                @foreach (var k in new[]{"Q","W","E","R","T","Y","U","I","O","P"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("1")'>1</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("2")'>2</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("3")'>3</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                @foreach (var k in new[]{"A","S","D","F","G","H","J","K","L"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("4")'>4</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("5")'>5</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("6")'>6</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                @foreach (var k in new[]{"Z","X","C","V","B","N","M"})
+                {
+                    var key = k;
+                    <button class="kb-key" @onclick="() => TypeKey(key)">@key</button>
+                }
+                <div class="kb-num-group">
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("7")'>7</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("8")'>8</button>
+                    <button class="kb-key kb-key--num" @onclick='() => TypeKey("9")'>9</button>
+                </div>
+            </div>
+            <div class="kb-row">
+                <button class="kb-key kb-key--action kb-key--eng" @onclick="ToggleLang">РУС</button>
+                <button class="kb-key kb-key--wide" @onclick='() => TypeKey("ПРОБЕЛ")'>SPACE</button>
+                <button class="kb-key kb-key--action" @onclick='() => TypeKey(".")'>.</button>
+                <button class="kb-key kb-key--num" @onclick='() => TypeKey("0")'>0</button>
+                <button class="kb-key kb-key--action kb-key--backspace" @onclick='() => TypeKey("⌫")'>&#9003;</button>
+            </div>
+        }
+    </div>
+
+</div>
+
+@code {
+    private List<GoodsGroupDto> _groups = new();
+    private string _searchText = "";
+    private string _letterFilter = "ВСЕ";
+    private int _page = 0;
+    private bool _engLayout = false;
+    private const int PageSize = 8;
+
+    private static readonly Dictionary<string, string[]> LetterGroups = new()
+    {
+        ["А,Б,В"] = ["А", "Б", "В"],
+        ["Г,Д,Е"] = ["Г", "Д", "Е"],
+        ["Ё,Ж,З"] = ["Ё", "Ж", "З"],
+        ["И,Й,К"] = ["И", "Й", "К"],
+        ["Л,М,Н"] = ["Л", "М", "Н"],
+        ["О,П,Р"] = ["О", "П", "Р"],
+        ["С,Т,У"] = ["С", "Т", "У"],
+        ["Ф,Х,Ц"] = ["Ф", "Х", "Ц"],
+        ["Ч,Ш,Щ"] = ["Ч", "Ш", "Щ"],
+        ["Э,Ю,Я"] = ["Э", "Ю", "Я"]
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        try { _groups = await Api.GetCatalogGroupsAsync() ?? new(); }
+        catch { _groups = new(); }
+    }
+
+    private List<GoodsGroupDto> FilteredGroups
+    {
+        get
+        {
+            var result = _groups.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(_searchText))
+                result = result.Where(g => g.Name.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
+
+            if (_letterFilter != "ВСЕ" && LetterGroups.TryGetValue(_letterFilter, out var letters))
+            {
+                result = result.Where(g =>
+                    g.Name.Length > 0 &&
+                    letters.Any(l => g.Name.StartsWith(l, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return result.ToList();
+        }
+    }
+
+    private int TotalPages => Math.Max(1, (int)Math.Ceiling(FilteredGroups.Count / (double)PageSize));
+
+    private List<GoodsGroupDto> PagedGroups =>
+        FilteredGroups.Skip(_page * PageSize).Take(PageSize).ToList();
+
+    private void SetLetterFilter(string filter)
+    {
+        _letterFilter = filter;
+        _page = 0;
+    }
+
+    private void PrevPage()
+    {
+        if (_page > 0) _page--;
+    }
+
+    private void NextPage()
+    {
+        if (_page < TotalPages - 1) _page++;
+    }
+
+    private void ClearSearch()
+    {
+        _searchText = "";
+        _page = 0;
+    }
+
+    private void TypeKey(string key)
+    {
+        switch (key)
+        {
+            case "⌫":
+                if (_searchText.Length > 0)
+                    _searchText = _searchText[..^1];
+                break;
+            case "ПРОБЕЛ":
+                _searchText += " ";
+                break;
+            default:
+                _searchText += key;
+                break;
+        }
+        _page = 0;
+    }
+
+    private void ToggleLang() => _engLayout = !_engLayout;
+
+    private void SelectGroup(GoodsGroupDto group)
+    {
+        // Переход к товарам группы — будет реализован в следующей задаче
+    }
+
+    private async Task CallAdmin()
+    {
+        await JS.InvokeVoidAsync("speakRu", "Ожидайте администратора");
+    }
+}

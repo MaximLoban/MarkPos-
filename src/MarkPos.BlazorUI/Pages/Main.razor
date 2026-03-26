@@ -1,0 +1,437 @@
+﻿@page "/main"
+@inject NavigationManager Nav
+@inject PosApiClient Api
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+@using Microsoft.AspNetCore.SignalR.Client
+
+<div class="main-screen">
+
+    <!-- ══ ХЕДЕР ══════════════════════════════════════════ -->
+    <header class="main-header">
+        <img src="images/logo.png" alt="евроопт" class="header-logo" />
+        <button class="admin-btn" @onclick="CallAdmin">
+            <img src="images/Admin.png" alt="" />
+            <span>ВЫЗОВ АДМИНИСТРАТОРА</span>
+        </button>
+    </header>
+
+    <!-- ══ ИНФО-ПОЛОСКА ════════════════════════════════════ -->
+    <div class="info-strip">
+        @if (HasDiscountCard)
+        {
+            <lottie-player src="images/cash%20back.json"
+                           background="transparent"
+                           speed="1"
+                           style="width:80px;height:50px;"
+                           loop autoplay>
+            </lottie-player>
+        }
+        else
+        {
+            <img src="images/DiscountCard.png" class="info-strip__icon" style="opacity:0.4" />
+        }
+        <span>@(HasDiscountCard ? DiscountCardText : "Отсканируйте Вашу дисконтную карту «Е-плюс»")</span>
+    </div>
+
+    <!-- ══ ОСНОВНОЙ КОНТЕНТ ════════════════════════════════ -->
+    <div class="main-content">
+
+        <!-- Левая часть -->
+        <div class="main-left">
+
+            <!-- Карточка текущего товара -->
+            <div class="current-item-card">
+                <div class="current-item-card__photo">
+                    @if (!string.IsNullOrEmpty(CurrentItemImage))
+                    {
+                        <img src="@CurrentItemImage"
+                             alt="фото товара"
+                             onerror="this.src='images/ImageCoffeCup.png'" />
+                    }
+                </div>
+                <div class="current-item-card__right">
+                    <div class="current-item-card__top">
+                        <div class="current-item-card__name">
+                            @if (HasCurrentItem)
+                            {
+                                <span>@CurrentItemName</span>
+                            }
+                            else
+                            {
+                                <span class="placeholder-text">ОТСКАНИРУЙТЕ ТОВАР</span>
+                            }
+                        </div>
+                        @if (HasCurrentItem)
+                        {
+                            <button class="delete-btn" @onclick="ShowDeleteConfirm">
+                                УДАЛИТЬ<br />ТОВАР
+                            </button>
+                        }
+                    </div>
+
+                    @if (HasCurrentItem)
+                    {
+                        <div class="current-item-card__divider"></div>
+                        <div class="current-item-card__bottom">
+                            <div class="price-block">
+                                <div class="price-block__label">ЦЕНА, BYN</div>
+                                <div class="price-block__value">@CurrentItemPrice</div>
+                            </div>
+                            <div class="qty-block">
+                                <div class="qty-block__label">КОЛИЧЕСТВО, ШТ</div>
+                                <div class="qty-block__controls">
+                                    <button class="qty-btn" @onclick="DecreaseQty">
+                                        <img src="images/CurrentQuantityMinus.png" alt="-" />
+                                    </button>
+                                    <div class="qty-block__value">@CurrentItemQty</div>
+                                    <button class="qty-btn" @onclick="IncreaseQty">
+                                        <img src="images/CurrentQuantityPlus.png" alt="+" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="total-block">
+                                <div class="total-block__label">ВСЕГО, BYN</div>
+                                <div class="total-block__value">@CurrentItemTotal</div>
+                                <div class="total-block__discount">
+                                    @(HasCurrentItemDiscount? CurrentItemDiscount : "\u00a0")
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Таблица корзины -->
+            <div class="cart-table">
+                <div class="cart-table__header">
+                    <span class="col-num"></span>
+                    <span class="col-name">В КОРЗИНЕ</span>
+                    <span class="col-price">ЦЕНА</span>
+                    <span class="col-qty">КОЛ-ВО/ВЕС</span>
+                    <span class="col-total">ВСЕГО</span>
+                </div>
+                <div class="cart-table__body">
+                    @if (State.Lines.Count == 0)
+                    {
+                        <div class="cart-table__empty">
+                            <img src="images/ScanerEmptyBascket.png" alt="" />
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var line in State.Lines)
+                        {
+                            <div class="cart-row">
+                                <span class="col-num">@line.LineNumber.ToString("D2").</span>
+                                <span class="col-name">@line.Name</span>
+                                <span class="col-price">@line.PriceOld.ToString("F2")</span>
+                                <span class="col-qty">@line.Quantity.ToString("F1")</span>
+                                <div class="col-total">
+                                    <span class="cart-row__sum">@line.TotalSum.ToString("F2")</span>
+                                    @if (line.DiscountSum > 0)
+                                    {
+                                        <span class="cart-row__discount">-@line.DiscountSum.ToString("F2")</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Итоги -->
+            <div class="cart-totals">
+                @if (HasDiscount)
+                {
+                    <div class="totals-row">
+                        <span>СУММА БЕЗ УЧЁТА СКИДКИ:</span>
+                        <span>@((State.TotalSum + State.DiscountSum).ToString("F2"))</span>
+                    </div>
+                    <div class="totals-row totals-row--discount">
+                        <span>ВАША СКИДКА ПО КАРТЕ «Е-ПЛЮС»:</span>
+                        <span>@DiscountSumText</span>
+                    </div>
+                }
+                <div class="totals-row totals-row--total">
+                    <span>ИТОГО К ОПЛАТЕ:</span>
+                    <span>@State.TotalSum.ToString("F2")</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая панель -->
+        <div class="main-sidebar">
+            <div class="sidebar-hint">
+                <img src="@(HasCurrentItem ? "images/Scaner.png" : "images/ScanerEmptyBascket.png")" alt="сканер" />
+            </div>
+            <div class="sidebar-buttons">
+                <div class="sidebar-btn sidebar-btn--clickable" @onclick='() => Nav.NavigateTo("/catalog")'>
+                    <img src="images/GoodsSearch.png" alt="" />
+                    <span>ИСКАТЬ В КАТАЛОГЕ</span>
+                    <img src="images/ButtonArrow.png" class="btn-arrow" alt="" />
+                </div>
+                <div class="sidebar-btn sidebar-btn--clickable">
+                    <img src="images/BarcodeSearch.png" alt="" />
+                    <span>ПОИСК ПО ШТРИХ-КОДУ</span>
+                    <img src="images/ButtonArrow.png" class="btn-arrow" alt="" />
+                </div>
+                <div class="sidebar-btn">
+                    <img src="images/BagAdd.png" alt="" />
+                    <span>ДОБАВИТЬ ПАКЕТЫ</span>
+                    <img src="images/ButtonArrow.png" class="btn-arrow" alt="" />
+                </div>
+            </div>
+            <button class="pay-btn" @onclick="Pay">ОПЛАТИТЬ</button>
+        </div>
+    </div>
+
+    <!-- ══ ОВЕРЛЕЙ: ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ ═════════════════ -->
+    @if (_showDeleteConfirm)
+    {
+        <div class="overlay overlay--confirm">
+            <div class="overlay__content">
+                <p class="overlay__message">ВВЕДИТЕ ПАРОЛЬ ДЛЯ УДАЛЕНИЯ ТОВАРА</p>
+                <input class="pin-input"
+                       type="password"
+                       maxlength="4"
+                       placeholder="••••"
+                       @bind="_deletePin"
+                       @bind:event="oninput"
+                       @ref="_pinInputRef"
+                       @onkeydown="OnPinKeyDown" />
+                @if (_deletePinError)
+                {
+                    <p class="pin-error">НЕВЕРНЫЙ ПАРОЛЬ</p>
+                }
+                <div class="overlay__buttons-row">
+                    <button class="overlay__close-btn" @onclick="CancelDelete">ОТМЕНА</button>
+                    <button class="overlay__close-btn overlay__close-btn--confirm" @onclick="ConfirmDelete">ПОДТВЕРДИТЬ</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ══ ОВЕРЛЕЙ: ОШИБКА ══════════════════════════════════ -->
+    @if (HasError)
+    {
+        <div class="overlay overlay--error">
+            <div class="overlay__content">
+                <img src="images/ScanerEmptyBascket.png" width="300" alt="" />
+                <p class="overlay__message">@State.Message</p>
+                <button class="overlay__close-btn" @onclick="ClearMessage">ЗАКРЫТЬ</button>
+            </div>
+        </div>
+    }
+
+    <!-- ══ ОВЕРЛЕЙ: ОПЛАТА УСПЕШНА ════════════════════════ -->
+    @if (_showPaySuccess)
+    {
+        <div class="overlay overlay--pay-success">
+            <div class="overlay__content">
+                <img src="images/Finish.png" width="300" alt="" />
+                <p class="pay-success__message">Какой ты молодец,<br />возвращайся к нам ещё!!!</p>
+                <div class="pay-success__timer"
+                     style="background: conic-gradient(#E0E0E0 @((5 - _countdown) * 72)deg, #8DC640 @((5 - _countdown) * 72)deg)">
+                    <div class="pay-success__countdown">@_countdown</div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ══ ОВЕРЛЕЙ: УСПЕХ (SignalR) ════════════════════════ -->
+    @if (HasSuccess)
+    {
+        <div class="overlay overlay--success">
+            <div class="overlay__content">
+                <img src="images/Finish.png" width="350" alt="" />
+                <p class="overlay__message overlay__message--success">
+                    ЗАБЕРИТЕ ВАШ ЧЕК И ПОКУПКИ.<br />ЖДЁМ ВАС СНОВА!
+                </p>
+                <button class="overlay__close-btn overlay__close-btn--green" @onclick="ClearMessage">
+                    НАЧАТЬ НОВУЮ ПОКУПКУ
+                </button>
+            </div>
+        </div>
+    }
+
+    <!-- ══ Статус подключения ════════════════════════════════ -->
+    @if (_hub?.State != HubConnectionState.Connected)
+    {
+        <div class="connection-badge">
+            @(_hub?.State == HubConnectionState.Connecting ? "⏳ Подключение..." : "⚠️ Нет связи с API")
+        </div>
+    }
+
+</div>
+
+@code {
+    private PosStateDto State = new();
+    private HubConnection? _hub;
+
+    // ── Оплата — успех ────────────────────────────────────
+    private bool _showPaySuccess;
+    private int _countdown = 5;
+    private CancellationTokenSource? _countdownCts;
+
+    // ── Удаление с паролем ────────────────────────────────
+    private bool _showDeleteConfirm;
+    private string _deletePin = "";
+    private bool _deletePinError;
+    private ElementReference _pinInputRef;
+    private const string DeletePin = "1111";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Начальное состояние
+        try { State = await Api.GetSessionAsync() ?? new(); }
+        catch { }
+
+        // SignalR — подключаемся к Api хабу
+        _hub = new HubConnectionBuilder()
+            .WithUrl("http://localhost:5050/hubs/pos")
+            .WithAutomaticReconnect()
+            .Build();
+
+        // Push от сервера — мгновенное обновление UI
+        _hub.On<PosStateDto>("StateChanged", state =>
+        {
+            Console.WriteLine("UI RECEIVED STATE");
+            State = state;
+            InvokeAsync(StateHasChanged);
+        });
+
+        try { await _hub.StartAsync(); }
+        catch { /* API недоступен — работаем без реалтайма */ }
+    }
+
+    // ── Биндинги ──────────────────────────────────────────────
+    private bool HasDiscountCard => State.DiscountCardNumber != null;
+    private string DiscountCardText => $"Карта ••••{State.DiscountCardNumber?[^4..]}••• принята!";
+    private bool HasCurrentItem => State.Lines.Count > 0;
+    private bool HasDiscount => State.DiscountSum > 0;
+    private string CurrentItemName => HasCurrentItem ? State.Lines[^1].Name : "";
+    private string CurrentItemPrice => HasCurrentItem ? State.Lines[^1].PriceOld.ToString("F2") : "0.00";
+    private string CurrentItemQty => HasCurrentItem ? State.Lines[^1].Quantity.ToString("F0") : "0";
+    private string CurrentItemTotal => HasCurrentItem ? State.Lines[^1].TotalSum.ToString("F2") : "0.00";
+    private bool HasCurrentItemDiscount => HasCurrentItem && State.Lines[^1].DiscountSum > 0;
+    private string CurrentItemDiscount => HasCurrentItemDiscount ? $"Скидка: -{State.Lines[^1].DiscountSum:F2}" : "";
+    private string CurrentItemImage =>
+        HasCurrentItem
+            ? $"http://localhost:5050/products/{State.Lines[^1].Product?.GoodsId}/image"
+            : "";
+    private string TotalSumText => State.TotalSum.ToString("F2");
+    private string SumWithoutDiscountText => (State.TotalSum + State.DiscountSum).ToString("F2");
+    private string DiscountSumText => $"-{State.DiscountSum:F2}";
+    private bool HasError => State.MessageType == 3;
+    private bool HasSuccess => State.MessageType == 4;
+    private string ErrorMessage => State.Message ?? "";
+
+    // ── Действия ──────────────────────────────────────────────
+    private async void ShowDeleteConfirm()
+    {
+        _deletePin = "";
+        _deletePinError = false;
+        _showDeleteConfirm = true;
+        await JS.InvokeVoidAsync("playBeep");
+    }
+
+    private void CancelDelete()
+    {
+        _showDeleteConfirm = false;
+        _deletePin = "";
+        _deletePinError = false;
+    }
+
+    private async Task ConfirmDelete()
+    {
+        if (_deletePin != DeletePin)
+        {
+            _deletePinError = true;
+            _deletePin = "";
+            return;
+        }
+        _showDeleteConfirm = false;
+        _deletePin = "";
+        _deletePinError = false;
+        await RemoveCurrent();
+    }
+
+    private async Task OnPinKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await ConfirmDelete();
+        if (e.Key == "Escape") CancelDelete();
+    }
+
+    private async Task RemoveCurrent()
+    {
+        if (!HasCurrentItem) return;
+        State = await Api.RemoveLineAsync(State.Lines[^1].LineNumber) ?? State;
+    }
+
+    private async Task IncreaseQty()
+    {
+        if (!HasCurrentItem) return;
+        var line = State.Lines[^1];
+        State = await Api.ChangeQtyAsync(line.LineNumber, line.Quantity + 1) ?? State;
+    }
+
+    private async Task DecreaseQty()
+    {
+        if (!HasCurrentItem) return;
+        var line = State.Lines[^1];
+        if (line.Quantity <= 1)
+            State = await Api.RemoveLineAsync(line.LineNumber) ?? State;
+        else
+            State = await Api.ChangeQtyAsync(line.LineNumber, line.Quantity - 1) ?? State;
+    }
+
+    private async Task Pay()
+    {
+        var result = await Api.PayAsync();
+        if (result?.Error != null) return;
+
+        _showPaySuccess = true;
+        _countdown = 5;
+        StateHasChanged();
+
+        await JS.InvokeVoidAsync("speakRu", "Какой ты молодец, возвращайся к нам ещё!");
+
+        _countdownCts = new CancellationTokenSource();
+        try
+        {
+            while (_countdown > 0)
+            {
+                await Task.Delay(1000, _countdownCts.Token);
+                _countdown--;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (TaskCanceledException) { return; }
+
+        _showPaySuccess = false;
+        await Api.CancelAsync();
+        Nav.NavigateTo("/");
+    }
+
+    private void ClearMessage()
+    {
+        State.MessageType = 0;
+        State.Message = null;
+        StateHasChanged();
+    }
+
+    private async Task CallAdmin()
+    {
+        await JS.InvokeVoidAsync("speakRu", "Ожидайте администратора");
+    }
+
+    private void FocusScan() { }
+
+    public async ValueTask DisposeAsync()
+    {
+        _countdownCts?.Cancel();
+        if (_hub != null)
+            await _hub.DisposeAsync();
+    }
+}
