@@ -1,4 +1,4 @@
-@page "/catalog"
+@page "/catalog/group/{GroupId:long}"
 @inject PosApiClient Api
 @inject NavigationManager Nav
 @inject IJSRuntime JS
@@ -30,30 +30,57 @@
     <div class="catalog-content">
 
         <!-- Левая кнопка НАЗАД -->
-        <button class="catalog-nav-btn" @onclick='() => Nav.NavigateTo("/main")'>
+        <button class="catalog-nav-btn" @onclick='() => Nav.NavigateTo("/catalog")'>
             <img src="images/ButtonArrow.png" class="catalog-nav-btn__arrow catalog-nav-btn__arrow--back" alt="" />
             <span>НАЗАД</span>
         </button>
 
         <!-- Центр: заголовок + сетка + пагинация -->
         <div class="catalog-center">
-            <div class="catalog-title">ПОИСК В КАТАЛОГЕ</div>
+            <div class="catalog-title">@_title</div>
 
             <div class="catalog-grid">
-                @foreach (var group in PagedGroups)
+                @if (_hasChildren)
                 {
-                    var g = group;
-                    <div class="group-tile" @onclick="() => SelectGroup(g)">
-                        <div class="group-tile__icon">
-                            <img src="@g.ImageUrl" alt="@g.Name"
-                                 onerror="this.style.display='none'" />
+                    @foreach (var group in PagedGroups)
+                    {
+                        var g = group;
+                        <div class="group-tile" @onclick="() => SelectChildGroup(g)">
+                            <div class="group-tile__icon">
+                                <img src="@g.ImageUrl" alt="@g.Name"
+                                     onerror="this.style.display='none'" />
+                            </div>
+                            <span class="group-tile__name">@g.Name</span>
                         </div>
-                        <span class="group-tile__name">@g.Name</span>
-                    </div>
+                    }
+                    @for (int i = PagedGroups.Count; i < PageSize; i++)
+                    {
+                        <div class="group-tile group-tile--empty"></div>
+                    }
                 }
-                @for (int i = PagedGroups.Count; i < PageSize; i++)
+                else
                 {
-                    <div class="group-tile group-tile--empty"></div>
+                    @foreach (var item in PagedItems)
+                    {
+                        var it = item;
+                        <div class="product-tile" @onclick="() => SelectProduct(it)">
+                            <div class="product-tile__photo">
+                                <img src="@it.ImageUrl" alt="@it.Name"
+                                     onerror="this.src='images/ImageCoffeCup.png'" />
+                            </div>
+                            <div class="product-tile__info">
+                                <div class="product-tile__name">@it.Name</div>
+                                <div class="product-tile__price">
+                                    <span class="product-tile__price-value">@it.Price.ToString("F2")</span>
+                                    <span class="product-tile__price-unit">за 1 кг</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @for (int i = PagedItems.Count; i < PageSize; i++)
+                    {
+                        <div class="group-tile group-tile--empty"></div>
+                    }
                 }
             </div>
 
@@ -183,7 +210,12 @@
 </div>
 
 @code {
-    private List<GoodsGroupDto> _groups = new();
+    [Parameter] public long GroupId { get; set; }
+
+    private bool _hasChildren = false;
+    private List<GoodsGroupDto> _childGroups = new();
+    private List<CatalogProductDto> _items = new();
+    private string _title = "КАТАЛОГ ТОВАРОВ";
     private string _searchText = "";
     private string _letterFilter = "ВСЕ";
     private int _page = 0;
@@ -204,17 +236,42 @@
         ["Э,Ю,Я"] = ["Э", "Ю", "Я"]
     };
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        try { _groups = await Api.GetCatalogGroupsAsync() ?? new(); }
-        catch { _groups = new(); }
+        _searchText = "";
+        _letterFilter = "ВСЕ";
+        _page = 0;
+        _childGroups = new();
+        _items = new();
+
+        try
+        {
+            _hasChildren = await Api.GroupHasChildrenAsync(GroupId);
+
+            if (_hasChildren)
+            {
+                _childGroups = await Api.GetChildGroupsAsync(GroupId) ?? new();
+            }
+            else
+            {
+                _items = await Api.GetGroupItemsAsync(GroupId) ?? new();
+            }
+        }
+        catch
+        {
+            _hasChildren = false;
+            _childGroups = new();
+            _items = new();
+        }
     }
+
+    // --- Группы ---
 
     private List<GoodsGroupDto> FilteredGroups
     {
         get
         {
-            var result = _groups.AsEnumerable();
+            var result = _childGroups.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(_searchText))
                 result = result.Where(g => g.Name.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
@@ -230,10 +287,44 @@
         }
     }
 
-    private int TotalPages => Math.Max(1, (int)Math.Ceiling(FilteredGroups.Count / (double)PageSize));
-
     private List<GoodsGroupDto> PagedGroups =>
         FilteredGroups.Skip(_page * PageSize).Take(PageSize).ToList();
+
+    // --- Товары ---
+
+    private List<CatalogProductDto> FilteredItems
+    {
+        get
+        {
+            var result = _items.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(_searchText))
+                result = result.Where(i => i.Name.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
+
+            if (_letterFilter != "ВСЕ" && LetterGroups.TryGetValue(_letterFilter, out var letters))
+            {
+                result = result.Where(i =>
+                    i.Name.Length > 0 &&
+                    letters.Any(l => i.Name.StartsWith(l, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return result.ToList();
+        }
+    }
+
+    private List<CatalogProductDto> PagedItems =>
+        FilteredItems.Skip(_page * PageSize).Take(PageSize).ToList();
+
+    // --- Пагинация ---
+
+    private int TotalPages
+    {
+        get
+        {
+            int count = _hasChildren ? FilteredGroups.Count : FilteredItems.Count;
+            return Math.Max(1, (int)Math.Ceiling(count / (double)PageSize));
+        }
+    }
 
     private void SetLetterFilter(string filter)
     {
@@ -277,9 +368,14 @@
 
     private void ToggleLang() => _engLayout = !_engLayout;
 
-    private void SelectGroup(GoodsGroupDto group)
+    private void SelectChildGroup(GoodsGroupDto group)
     {
         Nav.NavigateTo($"/catalog/group/{group.GoodsWeightGroupId}");
+    }
+
+    private void SelectProduct(CatalogProductDto item)
+    {
+        // TODO: добавить в корзину
     }
 
     private async Task CallAdmin()

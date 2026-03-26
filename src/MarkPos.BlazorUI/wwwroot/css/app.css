@@ -1090,23 +1090,22 @@ html, body {
 
 /* Тайл группы */
 .group-tile {
-    background: var(--graphite);
+    background: var(--green);
     border-radius: 12px;
     display: grid;
-    grid-template-columns: 72px 1fr;
-    align-items: center;
-    gap: 0;
+    grid-template-columns: 110px 1fr;
+    align-items: stretch;
     cursor: pointer;
     overflow: hidden;
     transition: filter 0.15s;
 }
 
 .group-tile:hover {
-    filter: brightness(1.2);
+    filter: brightness(1.08);
 }
 
 .group-tile--empty {
-    background: rgba(55, 60, 70, 0.25);
+    background: rgba(141, 198, 64, 0.25);
     cursor: default;
 }
 
@@ -1115,30 +1114,102 @@ html, body {
 }
 
 .group-tile__icon {
-    width: 72px;
-    height: 100%;
-    background: var(--green);
+    background: var(--graphite);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    flex-shrink: 0;
+    padding: 12px;
+    min-height: 80px;
 }
 
 .group-tile__icon img {
-    width: 100%;
-    max-height: 52px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
-    filter: invert(1) brightness(2);
+    filter: brightness(10);
 }
 
 .group-tile__name {
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 700;
-    font-size: clamp(12px, 1.4vw, 18px);
+    font-size: clamp(11px, 1.3vw, 16px);
     color: var(--white);
     line-height: 1.25;
+    display: flex;
+    align-items: center;
+}
+
+/* Тайл товара */
+.product-tile {
+    background: var(--white);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: stretch;
+    cursor: pointer;
+    overflow: hidden;
+    transition: filter 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.product-tile:hover {
+    filter: brightness(0.97);
+}
+
+.product-tile__photo {
+    background: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    min-height: 80px;
+}
+
+.product-tile__photo img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+.product-tile__info {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-tile__name {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: clamp(11px, 1.2vw, 15px);
+    color: var(--graphite);
+    line-height: 1.3;
+}
+
+.product-tile__price {
+    background: var(--green);
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 6px;
+    width: fit-content;
+}
+
+.product-tile__price-value {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+}
+
+.product-tile__price-unit {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: var(--white);
+    opacity: 0.9;
 }
 
 /* Пагинация */
